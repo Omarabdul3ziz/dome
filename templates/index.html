@@ -3,8 +3,9 @@
 {% block content %}
 
 <div class="content">
-    <h1> Do Me! </h1>
-
+{% if context|length < 1 %}
+<h1> None. </h1>
+{% else %}
     <table>
         <tr>
             <th>Task</th>
@@ -37,6 +38,7 @@
         {% endfor %}
     </table>
 </div>
+{% endif %}
 <div>
     <form action="/", method="POST">
         <input type="text" name="content" id="content">

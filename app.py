@@ -38,5 +38,10 @@ def delete(id):
     tasks.pop(id)
     return redirect('/')
 
+@app.route('/update/<int:id>', methods=['POST', 'GET'])
+def update(id):
+    #TODO: modify a query in the db
+    return ""
+
 if __name__ == "__main__":
     app.run(debug=True)
