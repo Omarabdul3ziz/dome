@@ -15,101 +15,46 @@
       
               <div class="card" style="border-radius: 15px;">
                 <div class="card-body p-5 " background="#FCDAB7">
-      
-                  <h3 class="text-center"> 
-                    Do Me! ...Done!, Get it?
-                </h3>
+
+            <!-- form -->
                 <div id="myDIV" class="header">
-                    <h2>My To Do List</h2>
+                    <h2> Do Me! ...Done!, Get it? </h2>
+
                     <form action="/", method="POST">
                         <input type="text" name="content" id="content" placeholder="Add new task">
                         <input type="submit" class="addBtn" value="Add">
                     </form>
-                  </div>
+                </div>
                   
-                  <ul id="myUL">
+            <!--List-->
+            <ul id="myUL">
 
-        {% for task in context %}
-        <tr>
-            <li>
+            {% for task in context %}
+                <li>
                 <div class="container">
                     <div class="row">
-                      <div class="col-6">
-                        {{ task.name }}
-                      </div>
-                      <div class="col-2">
-                        
-                    <a href="/delete/{{ task._id }}"> 
-                        Done
-                    </a>
-                      </div>
-                      <div class="col-2">
-                        <a href="/update/{{ task._id }}"> 
-                            Update
-                        </a>
-                      </div>
-                      <div class="col-2">
-                        <a href="/delete/{{ task._id }}"> 
-                            Delete
-                        </a>
-                      </div>
+
+                        <div class="col-6"> {{ task.name }} </div>
+
+                        <div class="col-2">
+                            <a href="/delete/{{ task._id }}"> Done </a>
+                        </div>
+
+                        <div class="col-2">
+                            <a href="/update/{{ task._id }}"> Update </a>
+                        </div>
+
+                        <div class="col-2">
+                            <a href="/delete/{{ task._id }}"> Delete </a>
+                        </div>
                     </div>
 
-                    
-                  </div>
-                <li>
+                        
+                </div>
                 </li>
-                <li>
-                    
-                </li>
-                <li>
-                    
-                </li>
-            </li>
-            
-        </tr>
-        {% endfor %}
-                    <li>Hit the gym</li>
-                    <li class="checked">Pay bills</li>
-                    
-                  </ul>
+            {% endfor %}
+            </ul>
                   
-    <table>
-        <tr>
-            <th>Task</th>
-            <th>Done</th>
-            <th>Update</th>
-            <th>Delete</th>
-        </tr>
-
-        {% for task in context %}
-        <tr>
-            <td>{{ task.name }}</td>
-            <td>
-                <a href="/delete/{{ task._id }}"> 
-                    Click
-                </a>
-            </td>
-            <td>
-                <a href="/update/{{ task._id }}"> 
-                    Click
-                </a>
-            </td>
-            <td>
-                <a href="/delete/{{ task._id }}"> 
-                    Click
-                </a>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
-</div>
-{% endif %}
-<div>
-    <form action="/", method="POST">
-        <input type="text" name="content" id="content">
-        <input type="submit" value="Add">
-    </form>
-</div>
+    {% endif %}
 
 {% endblock %}

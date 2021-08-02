@@ -7,6 +7,8 @@
   ul {
     margin: 0;
     padding: 0;
+    list-style-type: none;
+
   }
   
   /* Style the list items */
