@@ -1,33 +1,24 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-{% if context|length < 1 %}
-
-    <h3> Nothing here, add new task. </h3>  
-
-{% else %}
-
-<div class="content">
-        <div class="container py-5 h-100">
-          <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col col-xl-10">
-      
-              <div class="card" style="border-radius: 15px;">
-                <div class="card-body p-5 " background="#FCDAB7">
-
-            <!-- form -->
-                <div id="myDIV" class="header">
+                   
+        <!-- form -->
+        <div id="myDIV" class="header">
                     <h2> Do Me! ...Done!, Get it? </h2>
 
                     <form action="/", method="POST">
                         <input type="text" name="content" id="content" placeholder="Add new task">
                         <input type="submit" class="addBtn" value="Add">
                     </form>
-                </div>
-                  
-            <!--List-->
-            <ul id="myUL">
+        </div>
+            
+    {% if context|length < 1 %}
+        <br>
+        <h3 class="text-center"> Nothing here, add one. </h3>  
+    {% else %}      
+
+        <!--List-->
+        <ul id="myUL">
 
             {% for task in context %}
                 <li>
@@ -53,7 +44,7 @@
                 </div>
                 </li>
             {% endfor %}
-            </ul>
+        </ul>
                   
     {% endif %}
 
