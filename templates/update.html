@@ -3,11 +3,14 @@
 {% block content %}
 
 
-<div>
-    <form action="/update/{{ context._id }}", method="POST">
-        <input type="text" name="content" id="content" value="{{ context['name'] }}">
-        <input type="submit" value="Update">
-    </form>
-</div>
+        <!-- form -->
+        <div id="myDIV" class="header">
+            <h2> Do Me! ...Done!, Get it? </h2>
+            <br>
+            <form action="/update/{{ context._id }}", method="POST">
+                <input type="text" name="content" id="content" value="{{ context['name'] }}">
+                <input type="submit" class="addBtn" value="Update">
+            </form>
+        </div>
 
 {% endblock %}

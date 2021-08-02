@@ -5,10 +5,10 @@
         <!-- form -->
         <div id="myDIV" class="header">
                     <h2> Do Me! ...Done!, Get it? </h2>
-
+                    <br>
                     <form action="/", method="POST">
                         <input type="text" name="content" id="content" placeholder="Add new task">
-                        <input type="submit" class="addBtn" value="Add">
+                        <input type="submit" class="addBtn" class="btn btn-primary" value="Add">
                     </form>
         </div>
             
@@ -16,7 +16,7 @@
 
         <br>
         <h3 class="text-center"> Nothing here, add one. </h3>  
-        
+
     {% else %}      
 
         <!--List-->
@@ -27,18 +27,18 @@
                 <div class="container">
                     <div class="row">
 
-                        <div class="col-6"> {{ task.name }} </div>
-
-                        <div class="col-2">
-                            <a href="/delete/{{ task._id }}"> Done </a>
+                        <div class="col-1" class="icon" >
+                            <a href="/delete/{{ task._id }}"> <i class="far fa-check-circle"></i> </a>
                         </div>
 
-                        <div class="col-2">
-                            <a href="/update/{{ task._id }}"> Update </a>
+                        <div class="col-9" > {{ task.name }} </div>
+
+                        <div class="col-1" class="icon">
+                            <a href="/update/{{ task._id }}"> <i class="far fa-edit"></i> </a>
                         </div>
 
-                        <div class="col-2">
-                            <a href="/delete/{{ task._id }}"> Delete </a>
+                        <div class="col-1" class="icon" >
+                            <a href="/delete/{{ task._id }}"> <i class="far fa-trash-alt"></i> </a>
                         </div>
                     </div>
 

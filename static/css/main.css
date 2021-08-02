@@ -1,6 +1,7 @@
 /* Include the padding and border in an element's total width and height */
 * {
     box-sizing: border-box;
+    font-family: monospace;
   }
   
   /* Remove margins and padding from the list */
@@ -67,12 +68,13 @@
   }
   
   .close:hover {
-    background-color: #133B5C;
+    background-color: #ffffff;
     color: white;
   }
   
   /* Style the header */
   .header {
+    border-radius: 15px;
     background-color: #133B5C;
     padding: 30px 40px;
     color: white;
@@ -113,4 +115,8 @@
   
   .addBtn:hover {
     background-color: #bbb;
+  }
+
+  .icon {
+    text-align: center;
   }
