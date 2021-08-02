@@ -1,10 +1,77 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
 {% if context|length < 1 %}
-<h3> Nothing here, add new task. </h3>
+
+    <h3> Nothing here, add new task. </h3>  
+
 {% else %}
+
 <div class="content">
+        <div class="container py-5 h-100">
+          <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col col-xl-10">
+      
+              <div class="card" style="border-radius: 15px;">
+                <div class="card-body p-5 " background="#FCDAB7">
+      
+                  <h3 class="text-center"> 
+                    Do Me! ...Done!, Get it?
+                </h3>
+                <div id="myDIV" class="header">
+                    <h2>My To Do List</h2>
+                    <input type="text" id="myInput" placeholder="Title...">
+                    <span onclick="newElement()" class="addBtn">Add</span>
+                  </div>
+                  
+                  <ul id="myUL">
+
+        {% for task in context %}
+        <tr>
+            <li>
+                <div class="container">
+                    <div class="row">
+                      <div class="col-6">
+                        {{ task.name }}
+                      </div>
+                      <div class="col-2">
+                        
+                    <a href="/delete/{{ task._id }}"> 
+                        Done
+                    </a>
+                      </div>
+                      <div class="col-2">
+                        <a href="/update/{{ task._id }}"> 
+                            Update
+                        </a>
+                      </div>
+                      <div class="col-2">
+                        <a href="/delete/{{ task._id }}"> 
+                            Delete
+                        </a>
+                      </div>
+                    </div>
+
+                    
+                  </div>
+                <li>
+                </li>
+                <li>
+                    
+                </li>
+                <li>
+                    
+                </li>
+            </li>
+            
+        </tr>
+        {% endfor %}
+                    <li>Hit the gym</li>
+                    <li class="checked">Pay bills</li>
+                    
+                  </ul>
+                  
     <table>
         <tr>
             <th>Task</th>
