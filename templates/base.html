@@ -1,17 +1,35 @@
 <html>
     <head>
+        <title>
+            Dome!
+        </title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     </head>
 
-    <body>
+    <body style="background-color: #1D2D50;">
+        <div class="container py-5 h-100">
+        <div class="container py-5 h-100">
 
-        <h1> 
-            Do Me! ...Done!, Get it?
-        </h1>
-        <br>
-{{content}}
-        {% block content %}
+            <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col col-xl-10">
+        
+                <div class="card" style="border-radius: 15px;">
+                <div class="card-body p-5">
 
-        {% endblock %}
+                    
+                    {% block content %}
+                    {% endblock %}
+
+                </div>
+                </div>
+
+            </div>
+            </div>  
+
+        </div>
+        </div>
+    </body>
     </body>
 </html>

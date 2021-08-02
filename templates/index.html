@@ -1,46 +1,53 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% if context|length < 1 %}
-<h3> Nothing here, add new task. </h3>
-{% else %}
-<div class="content">
-    <table>
-        <tr>
-            <th>Task</th>
-            <th>Done</th>
-            <th>Update</th>
-            <th>Delete</th>
-        </tr>
 
-        {% for task in context %}
-        <tr>
-            <td>{{ task.name }}</td>
-            <td>
-                <a href="/delete/{{ task._id }}"> 
-                    Click
-                </a>
-            </td>
-            <td>
-                <a href="/update/{{ task._id }}"> 
-                    Click
-                </a>
-            </td>
-            <td>
-                <a href="/delete/{{ task._id }}"> 
-                    Click
-                </a>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
-</div>
-{% endif %}
-<div>
-    <form action="/", method="POST">
-        <input type="text" name="content" id="content">
-        <input type="submit" value="Add">
-    </form>
-</div>
+        <!-- form -->
+        <div id="myDIV" class="header">
+                    <h2> Do Me! ...Done!, Get it? </h2>
+                    <br>
+                    <form action="/", method="POST">
+                        <input type="text" name="content" id="content" placeholder="Add new task">
+                        <input type="submit" class="addBtn" class="btn btn-primary" value="Add">
+                    </form>
+        </div>
+            
+    {% if context|length < 1 %}
+
+        <br>
+        <h3 class="text-center"> Nothing here, add one. </h3>  
+
+    {% else %}      
+
+        <!--List-->
+        <ul id="myUL">
+
+            {% for task in context %}
+                <li>
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-1" class="icon" >
+                            <a href="/delete/{{ task._id }}"> <i class="far fa-check-circle"></i> </a>
+                        </div>
+
+                        <div class="col-9" > {{ task.name }} </div>
+
+                        <div class="col-1" class="icon">
+                            <a href="/update/{{ task._id }}"> <i class="far fa-edit"></i> </a>
+                        </div>
+
+                        <div class="col-1" class="icon" >
+                            <a href="/delete/{{ task._id }}"> <i class="far fa-trash-alt"></i> </a>
+                        </div>
+                    </div>
+
+                        
+                </div>
+                </li>
+            {% endfor %}
+        </ul>
+                  
+    {% endif %}
 
 {% endblock %}
