@@ -1,0 +1,16 @@
+version: '3.1'
+services:
+
+    app:
+        build: . # build the Dockerfile image
+        ports: 
+            - "8080:8080"
+        volumes:
+            - .:/app
+        links: 
+            - mongo
+
+            
+    mongo:
+        image: mongo
+        restart: always
