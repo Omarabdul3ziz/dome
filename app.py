@@ -1,47 +1,41 @@
+from bson.objectid import ObjectId
 from flask import Flask, render_template, url_for, request, redirect
-from werkzeug.utils import redirect
-
-app = Flask(__name__)
+from main import app, clc
 
 @app.route('/', methods=['POST', 'GET'])
-def index():
+def home():
     if request.method == 'POST':
         content = request.form['content']
         #TODO push new task to the db
+        clc.insert_one({'name': content})
         return redirect('/')
     else:
         #TODO grab all tasks from the db
-        tasks = [
-            {
-                'content': 'hello',
-                'due': 'today'
-            }
-        ]
+        tasks = list(clc.find())
 
         return render_template('index.html', context=tasks)
 
-@app.route('/del/<int:id>')
+@app.route('/delete/<id>')
 def delete(id):
+    clc.delete_one({"_id": ObjectId(id)})
+    return redirect(url_for('home'))
 
-    #TODO grab the task from the db with the id
-    tasks = [
-            {
-                'content': 'hello',
-                'due': 'today'
-            },
-
-            {
-                'content': 'hi',
-                'due': 'tomorrow'
-            }
-        ]
-    tasks.pop(id)
-    return redirect('/')
-
-@app.route('/update/<int:id>', methods=['POST', 'GET'])
+@app.route('/update/<id>', methods=['POST', 'GET'])
 def update(id):
-    #TODO: modify a query in the db
-    return ""
+    if request.method == 'POST':
+        content = request.form['content']
+        id = ObjectId(id)
+        clc.update_one({"_id": id}, { '$set' : { "name": content}})
+        return redirect(url_for('home'))
+
+    else:
+        #TODO grab all tasks from the db
+        id = ObjectId(id)
+        task = clc.find_one({"_id": id})
+        return render_template('update.html', context=task)
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

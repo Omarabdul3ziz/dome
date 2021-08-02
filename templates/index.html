@@ -1,15 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-<div class="content">
 {% if context|length < 1 %}
-<h1> None. </h1>
+<h3> Nothing here, add new task. </h3>
 {% else %}
+<div class="content">
     <table>
         <tr>
             <th>Task</th>
-            <th>Due</th>
             <th>Done</th>
             <th>Update</th>
             <th>Delete</th>
@@ -17,20 +15,19 @@
 
         {% for task in context %}
         <tr>
-            <td>{{ task.content }}</td>
-            <td>{{ task.due }}</td>
+            <td>{{ task.name }}</td>
             <td>
-                <a href=""> 
+                <a href="/delete/{{ task._id }}"> 
                     Click
                 </a>
             </td>
             <td>
-                <a href=""> 
+                <a href="/update/{{ task._id }}"> 
                     Click
                 </a>
             </td>
             <td>
-                <a href="/del/{{ task.id }}"> 
+                <a href="/delete/{{ task._id }}"> 
                     Click
                 </a>
             </td>
