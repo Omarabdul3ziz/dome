@@ -21,8 +21,10 @@
                 </h3>
                 <div id="myDIV" class="header">
                     <h2>My To Do List</h2>
-                    <input type="text" id="myInput" placeholder="Title...">
-                    <span onclick="newElement()" class="addBtn">Add</span>
+                    <form action="/", method="POST">
+                        <input type="text" name="content" id="content" placeholder="Add new task">
+                        <input type="submit" class="addBtn" value="Add">
+                    </form>
                   </div>
                   
                   <ul id="myUL">
