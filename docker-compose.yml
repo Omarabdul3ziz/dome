@@ -4,7 +4,7 @@ services: # the containers
     app:  # web server 
         build: . # build the Dockerfile image
         ports: 
-            - "8080:8080" # host port : container port
+            - "5000:5000" # host port : container port
         volumes:
             - .:/app # store the data in container/app outside, at host/.
         links: 
