@@ -96,6 +96,9 @@ export default {
 
       removeTodo(index) {
           this.todos.splice(index, 1)
+          const path = this.baseUrl + "/delete/" + index
+          Vue.axios.delete(path)
+          .then(location.reload())
       },
 
       editTodo(todo) {

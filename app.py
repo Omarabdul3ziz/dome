@@ -56,8 +56,11 @@ def add_tasks():
     clc.insert_one({'content': request.json['content'], 'done': False})
     return {"status": "Success"}
 
-@app.route('/delete/<id>', methods=['DELETE'])
-def del_task(id):
+@app.route('/delete/<int:index>', methods=['DELETE'])
+def del_task(index):
+    tasks = clc.find({})
+    task = tasks[index]
+    id = task["_id"]
     clc.delete_one({"_id": ObjectId(id)})
     return {"status": "Success"}
 
