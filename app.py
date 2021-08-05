@@ -58,17 +58,21 @@ def add_tasks():
 
 @app.route('/delete/<int:index>', methods=['DELETE'])
 def del_task(index):
-    tasks = clc.find({})
-    task = tasks[index]
-    id = task["_id"]
+    id = get_id(index)
     clc.delete_one({"_id": ObjectId(id)})
     return {"status": "Success"}
 
-@app.route('/update/<id>', methods=['PUT'])
-def update_task(id):
+@app.route('/update/<int:index>', methods=['PUT'])
+def update_task(index):
+    id = get_id(index)
     clc.update_one({"_id": ObjectId(id)}, {"$set": {'content': request.json['content']}}, upsert=True)
     return {"status": "Success"}
 
+def get_id(index):
+    tasks = clc.find({})
+    task = tasks[index]
+    id = task["_id"]
+    return id
 
 def json_it(cursor):
     content = []

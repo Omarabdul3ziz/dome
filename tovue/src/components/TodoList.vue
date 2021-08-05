@@ -1,15 +1,17 @@
 <template>
 
   <div>
+    <br>
+    <br>
+
     <input type="text" class="todo-input" placeholder="Add new task" v-model="newTodo" @keyup.enter="addTodo">
-    
     <!-- List -->
         <div v-for="(todo, index) in todos" :key="todo.id" class="todo-item">
             
             <dir class="todo-item-left">
                 <input type="checkbox" v-model="todo.done">
-                <div v-if="!todo.editing" @dblclick="editTodo(todo)" class="todo-item-label" :class="{ done : todo.done }">{{ todo.content }}</div>
-                <input v-else class="todo-item-edit" type="text" v-model="todo.content" @blur="doneEdit(todo)" @keyup.enter="doneEdit(todo)" @keyup.esc="doneEdit(todo)" v-focus>
+                <div v-if="!todo.editing" @dblclick="editTodo(todo, index)" class="todo-item-label" :class="{ done : todo.done }">{{ todo.content }}</div>
+                <input v-else class="todo-item-edit" type="text" v-model="todo.content" @blur="doneEdit(todo, index)" @keyup.enter="doneEdit(todo, index)" @keyup.esc="doneEdit(todo)" v-focus>
             </dir>
 
             <div class="remove-item" @click="removeTodo(index)">
@@ -95,7 +97,6 @@ export default {
       },
 
       removeTodo(index) {
-          this.todos.splice(index, 1)
           const path = this.baseUrl + "/delete/" + index
           Vue.axios.delete(path)
           .then(location.reload())
@@ -105,7 +106,13 @@ export default {
           todo.editing = true
       },
 
-      doneEdit(todo) {
+      updateTodo(todo, index) {
+          const path = this.baseUrl + "/update/" + index
+          Vue.axios.put(path, {'content': todo.content})
+      },
+
+      doneEdit(todo, index) {
+          this.updateTodo(todo, index);
           todo.editing = false
       }
   }
