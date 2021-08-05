@@ -125,6 +125,7 @@ export default {
 </script>
 
 <style>
+
   .todo-input {
     width: 100%;
     padding: 10px 18px;
