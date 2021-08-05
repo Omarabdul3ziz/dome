@@ -9,7 +9,7 @@
         <div v-for="(todo, index) in todos" :key="todo.id" class="todo-item">
             
             <dir class="todo-item-left">
-                <input type="checkbox" v-model="todo.done">
+                <input type="checkbox" v-model="todo.done" @click="updateStatus(todo, index)">
                 <div v-if="!todo.editing" @dblclick="editTodo(todo, index)" class="todo-item-label" :class="{ done : todo.done }">{{ todo.content }}</div>
                 <input v-else class="todo-item-edit" type="text" v-model="todo.content" @blur="doneEdit(todo, index)" @keyup.enter="doneEdit(todo, index)" @keyup.esc="doneEdit(todo)" v-focus>
             </dir>
@@ -114,6 +114,11 @@ export default {
       doneEdit(todo, index) {
           this.updateTodo(todo, index);
           todo.editing = false
+      }, 
+
+      updateStatus(todo, index) {
+          const path = this.baseUrl + "/check/" + index
+          Vue.axios.put(path, {'done': !todo.done}) // i think it takes the value before changing so i NOT it
       }
   }
 }

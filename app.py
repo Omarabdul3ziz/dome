@@ -68,6 +68,12 @@ def update_task(index):
     clc.update_one({"_id": ObjectId(id)}, {"$set": {'content': request.json['content']}}, upsert=True)
     return {"status": "Success"}
 
+@app.route('/check/<int:index>', methods=['PUT'])
+def check(index):
+    id = get_id(index)
+    clc.update_one({'_id': ObjectId(id)}, {"$set": {'done': request.json['done']}}, upsert=True)
+    return {'status': "Success"}
+
 def get_id(index):
     tasks = clc.find({})
     task = tasks[index]
