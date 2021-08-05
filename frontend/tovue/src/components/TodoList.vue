@@ -38,7 +38,7 @@ export default {
       return {
           newTodo: '',
           idForTodo: 3,
-          baseUrl: 'http://192.168.1.111:5000',
+          baseUrl: '/api',
 
           todos: []}
   },
