@@ -34,6 +34,8 @@ services:
         #  expose port on the container, only to other containers
         expose:
             - 8080
+        links: 
+            - mongo
 
     nginx:
         build: ./nginx
@@ -42,7 +44,7 @@ services:
         # port allows the host machine to link to container
         # pass 80 from host machine to 80 of the image filesystem
         ports:
-            - "80:80"
+            - "8082:8082"
 
     frontend:
         build: ./frontend
@@ -58,9 +60,6 @@ services:
             - "8000:8000"
             - "5000:5000"
 
-    mongo:
-        image: mongo
-        restart: on-failure        
     # mongodb:
     #     image: mongo:4.2.5-bionic
     #     container_name:  mongodb
@@ -94,3 +93,6 @@ services:
     #         - ME_CONFIG_BASICAUTH_PASSWORD=express
     #     ports:
     #         - 8081:8081
+    mongo:
+        image: mongo
+        restart: on-failure
