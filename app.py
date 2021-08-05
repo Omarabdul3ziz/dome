@@ -53,7 +53,7 @@ def get_task(id):
 
 @app.route('/add', methods=['POST'])
 def add_tasks():
-    clc.insert_one({'content': request.json['content']})
+    clc.insert_one({'content': request.json['content'], 'done': False})
     return {"status": "Success"}
 
 @app.route('/delete/<id>', methods=['DELETE'])
@@ -70,7 +70,7 @@ def update_task(id):
 def json_it(cursor):
     content = []
     for query in cursor:
-        content.append(query['content'])
+        content.append({'content': query['content'], 'done': query['done']})
     return content
 
 

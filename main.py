@@ -1,9 +1,11 @@
 from flask import Flask
 from pymongo import MongoClient
+from flask_cors import CORS
 
 import os 
 
 app = Flask(__name__)
+CORS(app) # This makes the CORS feature cover all routes in the app
 
 connection_url_at_docker = "mongodb://mongo:27017"
 connection_url_at_host = "mongodb://localhost"

@@ -8,8 +8,8 @@
             
             <dir class="todo-item-left">
                 <input type="checkbox" v-model="todo.done">
-                <div v-if="!todo.editing" @dblclick="editTodo(todo)" class="todo-item-label" :class="{ done : todo.done }">{{ todo.title }}</div>
-                <input v-else class="todo-item-edit" type="text" v-model="todo.title" @blur="doneEdit(todo)" @keyup.enter="doneEdit(todo)" @keyup.esc="doneEdit(todo)" v-focus>
+                <div v-if="!todo.editing" @dblclick="editTodo(todo)" class="todo-item-label" :class="{ done : todo.done }">{{ todo.content }}</div>
+                <input v-else class="todo-item-edit" type="text" v-model="todo.content" @blur="doneEdit(todo)" @keyup.enter="doneEdit(todo)" @keyup.esc="doneEdit(todo)" v-focus>
             </dir>
 
             <div class="remove-item" @click="removeTodo(index)">
@@ -19,10 +19,16 @@
         </div>
     <!-- End list -->
 
+
   </div>
 </template>
 
 <script>
+import Vue from 'vue'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+
+Vue.use(VueAxios, axios)
 
 export default {
   name: 'todo-list',
@@ -30,21 +36,9 @@ export default {
       return {
           newTodo: '',
           idForTodo: 3,
+          baseUrl: 'http://192.168.1.111:5000',
 
-          todos: [
-          {
-              'id': 1,
-              'title': "go champ",
-              'done': true,
-              'editing': false
-          },
-          {
-              'id': 2,
-              'title': "conquer",
-              'done': false,
-              'editing': false
-          }
-      ]}
+          todos: []}
   },
 
   directives: {
@@ -55,7 +49,25 @@ export default {
     }
   },
 
+  created() {
+    this.getTodos();
+  },
+
   methods: {
+
+      getTodos(){
+        const path = this.baseUrl + "/tasks"
+        Vue.axios.get(path)
+          .then((res) => {
+            res.data["Tasks"].forEach((todo) => {
+              this.todos.push({
+                'content': todo.content,
+                'done': todo.done,
+                'editing': false
+              })
+            });
+          })
+      },
 
       addTodo() {
 
@@ -63,12 +75,21 @@ export default {
               return
           }
 
-          this.todos.push({
-              id: this.idForTodo,
-              title: this.newTodo,
-              done: false
-          })
+          // this.todos.push({
+          //     id: this.idForTodo,
+          //     title: this.newTodo,
+          //     done: false
+          // })
 
+          const path = this.baseUrl + "/add";
+          var newEntry = {
+            'content': this.newTodo,
+            'done': false,
+            'editing': false
+          }
+          Vue.axios.post(path, newEntry)
+            .then(response => this.idForTodo = response.data.id)
+            .then(location.reload())
           this.newTodo=''
           this.idForTodo++
       },
