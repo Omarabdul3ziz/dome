@@ -4,10 +4,10 @@ from time import time
 from bson.objectid import ObjectId
 
 app = Flask(__name__)
-app.config["MONGO_URI"] = 'mongodb://localhost:27017'
+app.config["MONGO_URI"] = 'mongodb://mongo:27017' # the hostname and the port inside mongo docker
 
 # ----> Creating/Connecting Db
-client = MongoClient(host='0.0.0.0', port=27017)
+client = MongoClient('mongodb://mongo:27017')
 database = client['dome_database']
 col = database['tasks']
 
@@ -61,4 +61,4 @@ def list_queries(cursor):
 
 # ----> WSGI
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=11) # host and port in flask container

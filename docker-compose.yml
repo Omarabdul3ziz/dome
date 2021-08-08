@@ -1,0 +1,22 @@
+version: "3"
+
+services: 
+  flask:
+    build: ./server
+    ports:
+      - "1001:11"
+    volumes: 
+      - ./server:/usr/src/app
+    container_name: server
+    depends_on: 
+      - mongo
+    
+  mongo:
+    image: mongo
+    hostname: mongo # pass to mongoclient
+    volumes: 
+      - ./database:/data
+    container_name: database
+    ports:
+      - "2717:27017"
+    restart: unless-stopped
