@@ -9,6 +9,8 @@ services:
     volumes: 
       - ./server:/usr/src/app
     container_name: server
+    restart: unless-stopped
+
     depends_on: 
       - mongo
     
