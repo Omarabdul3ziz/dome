@@ -3,8 +3,9 @@ version: "3"
 services: 
   flask:
     build: ./server
+    hostname: server
     ports:
-      - "1001:11"
+      - "5001:5000"
     volumes: 
       - ./server:/usr/src/app
     container_name: server
@@ -20,3 +21,13 @@ services:
     ports:
       - "2717:27017"
     restart: unless-stopped
+  
+  vue:
+    build: ./client
+    volumes: 
+      - ./client:/app
+    container_name: client
+    ports: 
+      - "8081:8080"
+    depends_on: 
+      - flask

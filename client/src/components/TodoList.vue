@@ -10,7 +10,7 @@
             
             <dir class="todo-item-left">
                 <input type="checkbox" v-model="todo.status" @click="updateStatus(todo, index)">
-                <div v-if="!todo.editing" @dblclick="editTodo(todo, index)" class="todo-item-label" :class="{ status : todo.status }">{{ todo.title }}</div>
+                <div v-if="!todo.editing" @dblclick="editTodo(todo, index)" class="todo-item-label" :class="{ status : todo.status }">{{ 12 }}</div>
                 <input v-else class="todo-item-edit" type="text" v-model="todo.title" @blur="doneEdit(todo, index)" @keyup.enter="doneEdit(todo, index)" @keyup.esc="doneEdit(todo)" v-focus>
             </dir>
 
@@ -38,7 +38,7 @@ export default {
       return {
           newTodo: '',
           idForTodo: 3,
-          baseUrl: 'http://server:5000/tasks/',
+          baseUrl: 'http://flask:5000/tasks',
 
           todos: []}
   },
@@ -95,7 +95,7 @@ export default {
 
       removeTodo(index) {
           this.todos.splice(index, 1)
-          const path = this.baseUrl + index
+          const path = this.baseUrl + "/" + index
           Vue.axios.delete(path)
       },
 
@@ -104,7 +104,7 @@ export default {
       },
 
       updateTodo(todo, index) {
-          const path = this.baseUrl + index
+          const path = this.baseUrl + "/" + index
           Vue.axios.put(path, {'title': todo.title})
       },
 
@@ -114,7 +114,7 @@ export default {
       }, 
 
       updateStatus(todo, index) {
-          const path = this.baseUrl + index + "/check"
+          const path = this.baseUrl + "/" + index + "/check"
           Vue.axios.put(path, {'status': !todo.status}) // i think it takes the value before changing so i NOT it
       }
   }
