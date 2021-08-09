@@ -3,7 +3,12 @@ from pymongo import MongoClient
 from time import time
 from bson.objectid import ObjectId
 
+from flask_cors import CORS
+
 app = Flask(__name__)
+
+CORS(app)
+
 app.config["MONGO_URI"] = 'mongodb://mongo:27017' # the hostname and the port inside mongo docker
 
 # ----> Creating/Connecting Db

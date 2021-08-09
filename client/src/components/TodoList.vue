@@ -10,7 +10,7 @@
             
             <dir class="todo-item-left">
                 <input type="checkbox" v-model="todo.status" @click="updateStatus(todo, index)">
-                <div v-if="!todo.editing" @dblclick="editTodo(todo, index)" class="todo-item-label" :class="{ status : todo.status }">{{ 12 }}</div>
+                <div v-if="!todo.editing" @dblclick="editTodo(todo, index)" class="todo-item-label" :class="{ status : todo.status }">{{ todo.title }}</div>
                 <input v-else class="todo-item-edit" type="text" v-model="todo.title" @blur="doneEdit(todo, index)" @keyup.enter="doneEdit(todo, index)" @keyup.esc="doneEdit(todo)" v-focus>
             </dir>
 
