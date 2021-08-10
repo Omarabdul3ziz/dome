@@ -38,7 +38,7 @@ export default {
       return {
           newTodo: '',
           idForTodo: 3,
-          baseUrl: 'http://flask:5000/tasks',
+          baseUrl: 'http://172.27.0.3:5000/tasks',
 
           todos: []}
   },

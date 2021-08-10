@@ -43,7 +43,7 @@ def update(index):
 
 # Which is the right one? PUT method becouse we update the resources 
 # Or GET becouse i just need to reverse and the body will be empty
-@app.route('/tasks/<int:index>/check', methods=['GET'])
+@app.route('/tasks/<int:index>/check', methods=['PUT'])
 def check(index):
     id = get_id(index)
     col.update_one({'_id': ObjectId(id)}, {"$set": {'status': request.json['status']}}, upsert=True)
