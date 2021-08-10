@@ -9,9 +9,9 @@
         <div v-for="(todo, index) in todos" :key="todo.id" class="todo-item">
             
             <dir class="todo-item-left">
-                <input type="checkbox" v-model="todo.done" @click="updateStatus(todo, index)">
-                <div v-if="!todo.editing" @dblclick="editTodo(todo, index)" class="todo-item-label" :class="{ done : todo.done }">{{ todo.content }}</div>
-                <input v-else class="todo-item-edit" type="text" v-model="todo.content" @blur="doneEdit(todo, index)" @keyup.enter="doneEdit(todo, index)" @keyup.esc="doneEdit(todo)" v-focus>
+                <input type="checkbox" v-model="todo.status" @click="updateStatus(todo, index)">
+                <div v-if="!todo.editing" @dblclick="editTodo(todo, index)" class="todo-item-label" :class="{ status : todo.status }">{{ todo.title }}</div>
+                <input v-else class="todo-item-edit" type="text" v-model="todo.title" @blur="doneEdit(todo, index)" @keyup.enter="doneEdit(todo, index)" @keyup.esc="doneEdit(todo)" v-focus>
             </dir>
 
             <div class="remove-item" @click="removeTodo(index)">
@@ -38,7 +38,7 @@ export default {
       return {
           newTodo: '',
           idForTodo: 3,
-          baseUrl: '/api',
+          baseUrl: 'http://172.27.0.3:5000/tasks',
 
           todos: []}
   },
@@ -58,13 +58,14 @@ export default {
   methods: {
 
       getTodos(){
-        const path = this.baseUrl + "/tasks"
+        const path = this.baseUrl
         Vue.axios.get(path)
           .then((res) => {
             res.data["Tasks"].forEach((todo) => {
               this.todos.push({
-                'content': todo.content,
-                'done': todo.done,
+                'title': todo.title,
+                'status': todo.status,
+                'due': todo.due,
                 'editing': false
               })
             });
@@ -77,29 +78,25 @@ export default {
               return
           }
 
-          // this.todos.push({
-          //     id: this.idForTodo,
-          //     title: this.newTodo,
-          //     done: false
-          // })
-
-          const path = this.baseUrl + "/add";
+          const path = this.baseUrl;
           var newEntry = {
-            'content': this.newTodo,
-            'done': false,
+            'title': this.newTodo,
+            'status': false,
+            'due': 0,
             'editing': false
           }
           Vue.axios.post(path, newEntry)
             .then(response => this.idForTodo = response.data.id)
-            .then(location.reload())
+            .then(this.todos.push(newEntry))
           this.newTodo=''
           this.idForTodo++
+          
       },
 
       removeTodo(index) {
-          const path = this.baseUrl + "/delete/" + index
+          this.todos.splice(index, 1)
+          const path = this.baseUrl + "/" + index
           Vue.axios.delete(path)
-          .then(location.reload())
       },
 
       editTodo(todo) {
@@ -107,8 +104,8 @@ export default {
       },
 
       updateTodo(todo, index) {
-          const path = this.baseUrl + "/update/" + index
-          Vue.axios.put(path, {'content': todo.content})
+          const path = this.baseUrl + "/" + index
+          Vue.axios.put(path, {'title': todo.title})
       },
 
       doneEdit(todo, index) {
@@ -117,8 +114,8 @@ export default {
       }, 
 
       updateStatus(todo, index) {
-          const path = this.baseUrl + "/check/" + index
-          Vue.axios.put(path, {'done': !todo.done}) // i think it takes the value before changing so i NOT it
+          const path = this.baseUrl + "/" + index + "/check"
+          Vue.axios.put(path, {'status': !todo.status}) // i think it takes the value before changing so i NOT it
       }
   }
 }
@@ -167,7 +164,7 @@ export default {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
   }
 
-  .done {
+  .status {
     text-decoration: line-through;
     color: grey;
   }
