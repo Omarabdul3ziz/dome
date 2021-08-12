@@ -16,8 +16,8 @@ spec:
     spec:
       containers:
       - name: mongo
-        image: mongo:local
-        imagePullPolicy: Never
+        image: omarabdul3ziz/mongodb:1.0
+        imagePullPolicy: IfNotPresent
         env:
           - name: MONGO_INITDB_ROOT_USERNAME
             valueFrom:

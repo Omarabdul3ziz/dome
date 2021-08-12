@@ -16,8 +16,8 @@ spec:
     spec:
       containers:
       - name: vue
-        image: vue:local
-        imagePullPolicy: Never
+        image: omarabdul3ziz/vueui:1.0
+        imagePullPolicy: IfNotPresent
       restartPolicy: Always
 ---
 apiVersion: v1
