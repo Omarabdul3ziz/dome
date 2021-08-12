@@ -15,6 +15,8 @@ RUN npm install
 # copy project files and folders to the current working directory (i.e. 'app' folder)
 COPY . .
 
+ENV VUE_APP_ROOT_API=http://do.me
+
 # build app for production with minification
 RUN npm run build
 

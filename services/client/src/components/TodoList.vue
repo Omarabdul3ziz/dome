@@ -38,7 +38,8 @@ export default {
       return {
           newTodo: '',
           idForTodo: 3,
-          baseUrl: 'http://172.27.0.3:5000/tasks',
+          // baseUrl: 'http://do.me/tasks',
+          baseUrl: process.env.VUE_APP_ROOT_API + '/tasks',
 
           todos: []}
   },
