@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 
 COPY requirments.txt ./
 
-RUN python3 -m pip install --user --no-cache-dir -r requirments.txt
+RUN python3 -m pip install --no-cache-dir -r requirments.txt
 
 COPY . .
 

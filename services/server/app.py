@@ -2,19 +2,25 @@ from flask import Flask, jsonify, request
 from pymongo import MongoClient 
 from time import time
 from bson.objectid import ObjectId
-
+import os
 from flask_cors import CORS
 
 app = Flask(__name__)
 
 CORS(app)
 
-app.config["MONGO_URI"] = 'mongodb://mongo:27017' # the hostname and the port inside mongo docker
 
 # ----> Creating/Connecting Db
-client = MongoClient('mongodb://mongo:27017')
+
+MONGO_INITDB_ROOT_USERNAME = os.environ.get('MONGO_INITDB_ROOT_USERNAME')
+MONGO_INITDB_ROOT_PASSWORD = os.environ.get('MONGO_INITDB_ROOT_PASSWORD')
+DATABASE_URL = f'mongodb://{MONGO_INITDB_ROOT_USERNAME}:{MONGO_INITDB_ROOT_PASSWORD}@mongo:27017'
+
+client = MongoClient(DATABASE_URL)
 database = client['dome_database']
 col = database['tasks']
+
+app.config["MONGO_URI"] = DATABASE_URL
 
 # ----> CRUD API
 @app.route('/tasks', methods=["GET"])
