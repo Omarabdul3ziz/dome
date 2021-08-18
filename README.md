@@ -30,3 +30,27 @@ To-do List app with ( Flask - MongoDB - Vue.js ) stack, each service containeriz
     ```
 
 - Open your browser and go to [http://do.me/](http://do.me/)
+
+
+
+
+**Helm**
+
+- Install from `.tgz` file
+
+    It will download the images from public registry
+
+    ```bash
+    helm install dome-chart ./dome-0.1.0.tgz
+    ```
+
+
+- Add path to hosts 
+
+    ```bash
+    echo "$(minikube ip) do.me" | sudo tee -a /etc/hosts
+    ```
+
+    
+
+- Open your browser and go to [http://do.me/](http://do.me/)
