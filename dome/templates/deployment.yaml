@@ -19,23 +19,21 @@ spec:
         image: {{ .Values.mongo.image }}
         imagePullPolicy: {{ .Values.mongo.pullPolicy }}
         env:
-          - name: MONGO_INITDB_ROOT_USERNAME
+          {{- range $var := .Values.env }}
+          - name: {{$var.name}}
             valueFrom:
               secretKeyRef:
-                name: mongo-credentials
-                key: user
-          - name: MONGO_INITDB_ROOT_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: mongo-credentials
-                key: password
+                name: {{ $var.secretName }}
+                key: {{ $var.key }}
+          {{- end }}
+
         volumeMounts:
-          - name: mongo-volume-mount
-            mountPath: /var/lib/mongo/data
+          - name: {{ .Values.volume.name }}-volume-mount
+            mountPath: {{ .Values.volume.mountPath }}
       volumes:
-      - name: mongo-volume-mount
+      - name: {{ .Values.volume.name }}-volume-mount
         persistentVolumeClaim:
-          claimName: mongo-pvc
+          claimName: {{ .Values.volume.name }}-pvc
       restartPolicy: {{ .Values.mongo.restartPolicy }}
 
 ---
@@ -60,16 +58,13 @@ spec:
         image: {{ .Values.flask.image }}
         imagePullPolicy: {{ .Values.flask.pullPolicy }}
         env:
-        - name: MONGO_INITDB_ROOT_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: mongo-credentials
-              key: user
-        - name: MONGO_INITDB_ROOT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mongo-credentials
-              key: password
+          {{- range $var := .Values.env }}
+          - name: {{$var.name}}
+            valueFrom:
+              secretKeyRef:
+                name: {{ $var.secretName }}
+                key: {{ $var.key }}
+          {{- end }}
       restartPolicy: {{ .Values.flask.restartPolicy }}
 ---
 apiVersion: apps/v1
