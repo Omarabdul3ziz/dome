@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.mongo.name }}
+  labels:
+    name: {{ .Values.mongo.name }}
+spec:
+  replicas: {{ .Values.mongo.replicas }}
+  selector:
+    matchLabels:
+      service: {{ .Values.mongo.label }}
+  template:
+    metadata:
+      labels:
+        service: {{ .Values.mongo.label }}
+    spec:
+      containers:
+      - name: {{ .Values.mongo.name }}
+        image: {{ .Values.mongo.image }}
+        imagePullPolicy: {{ .Values.mongo.pullPolicy }}
+        env:
+          - name: MONGO_INITDB_ROOT_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: mongo-credentials
+                key: user
+          - name: MONGO_INITDB_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mongo-credentials
+                key: password
+        volumeMounts:
+          - name: mongo-volume-mount
+            mountPath: /var/lib/mongo/data
+      volumes:
+      - name: mongo-volume-mount
+        persistentVolumeClaim:
+          claimName: mongo-pvc
+      restartPolicy: {{ .Values.mongo.restartPolicy }}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.flask.name }}
+  labels:
+    name: {{ .Values.flask.name }}
+spec:
+  replicas: {{ .Values.flask.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.flask.label }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.flask.label }}
+    spec:
+      containers:
+      - name: {{ .Values.flask.name }}
+        image: {{ .Values.flask.image }}
+        imagePullPolicy: {{ .Values.flask.pullPolicy }}
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mongo-credentials
+              key: user
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongo-credentials
+              key: password
+      restartPolicy: {{ .Values.flask.restartPolicy }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.vue.name }}
+  labels:
+    name: {{ .Values.vue.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.vue.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.vue.name }}
+    spec:
+      containers:
+      - name: {{ .Values.vue.name }}
+        image: {{ .Values.vue.image }}
+        imagePullPolicy: {{ .Values.vue.pullPolicy }}
+      restartPolicy: {{ .Values.vue.restartPolicy }}
