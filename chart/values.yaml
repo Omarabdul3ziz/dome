@@ -11,8 +11,8 @@ image:
   tag: ""
 
 imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
+nameOverride: "dome-app"
+fullnameOverride: "dome-chart"
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -94,11 +94,11 @@ ingress:
   host: do.me
   paths: [
   {"path": /,
-  "pathType": Perfix,
+  "pathType": Prefix,
   "serviceName": vue,
   "servicePort": 8080},
   {"path": /tasks,
-  "pathType": Perfix,
+  "pathType": Prefix,
   "serviceName": flask,
   "servicePort": 5000}]
 
