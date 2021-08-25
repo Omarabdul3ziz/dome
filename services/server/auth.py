@@ -1,34 +1,30 @@
 import os
-import requests
+from flask import jsonify, redirect, url_for
+from flask_dance.contrib.github import github, make_github_blueprint
 
-from urllib.parse import parse_qs
+from app import app
 
-CLIENT_ID = os.getenv("GITHUB_ID")
-CLIENT_SECRET = os.getenv("GITHUB_SECRET")
-AUTHORIZATION_ENDPOINT = f"https://github.com/login/oauth/authorize?response_type=code&client_id={os.getenv('GITHUB_ID')}"
-TOKEN_ENDPOINT = "https://github.com/login/oauth/access_token"
-USER_ENDPOINT = "https://api.github.com/user"
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1' # to make oath accept not https requests
+GITHUB_ID = os.getenv("GITHUB_ID")
+GITHUB_SECRET = os.getenv("GITHUB_SECRET")
 
-# [1] send verification request 
-print(f"Authorization URL: {AUTHORIZATION_ENDPOINT}")
-# [2] back with auth code
-code = input("Enter the code: ")
+github_blueprint = make_github_blueprint(client_id=GITHUB_ID, client_secret=GITHUB_SECRET )
+app.register_blueprint(github_blueprint, url_prefix="/login")
 
-# [3] ask for access token by sending the oath code
-res = requests.post(
-    TOKEN_ENDPOINT,
-    data=dict(
-        client_id=os.getenv("GITHUB_ID"),
-        client_secret=os.getenv("GITHUB_SECRET"),
-        code=code,
-    ),
-)
-# [4] response contain access token
-res = parse_qs(res.content.decode("utf-8"))
-token = res["access_token"][0]
 
-# [5] obtain information from access token
-user_data = requests.get(USER_ENDPOINT, headers=dict(Authorization=f"token {token}"))
-username = user_data.json()["login"]
-print(f"You are {username} on GitHub")
+@app.route("/github")
+def login():
+    if not github.authorized:
+        return redirect(url_for("github.login"))
+    res = github.get("/user")
+    username = res.json()["login"]
+    assert res.ok
+    return f"Welcom {username}"
+
+def logged_in(func):
+    def wrapper(*args, **kwargs):
+        if not github.authorized:
+            return redirect(url_for("github.login"))
+        return func(*args, **kwargs)
+    return wrapper
 
