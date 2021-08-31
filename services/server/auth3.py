@@ -22,8 +22,8 @@ GITHUB_ID = os.getenv("GITHUB_ID")
 GITHUB_SECRET = os.getenv("GITHUB_SECRET")
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1' # to make oath accept not https requests
 
-GITHUB_ID = 'f999c153151ddfb524ce'
-GITHUB_SECRET = 'a2a5e3f47e20c2fd0afc3729ce732fe26dba419b'
+GITHUB_ID = 
+GITHUB_SECRET = 
 
 github_blueprint = make_github_blueprint(client_id=GITHUB_ID, client_secret=GITHUB_SECRET )
 app.register_blueprint(github_blueprint, url_prefix='/github_login')
