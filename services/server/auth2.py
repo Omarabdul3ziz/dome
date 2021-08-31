@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, make_response
+from flask import Flask, json, request, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
 import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -141,7 +141,7 @@ def delete_user(current_user, public_id):
 
     return jsonify(message="User deleted!")
 
-# -------- user api -------- #
+# -------- auth -------- #
 
 @app.route('/login')
 def login():
@@ -160,6 +160,99 @@ def login():
         return jsonify(token=token.decode('UTF-8'))
 
     return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+
+# -------- todo api -------- #
+
+@app.route('/task', methods=["GET"])
+@tocken_required
+def get_all_tasks(current_user):
+
+    tasks = Todo.query.filter_by(user_id=current_user.id).all()
+
+    output = []
+
+    for task in tasks:
+        data = {}
+        data['id'] = task.id
+        data['text'] = task.text
+        data['complete'] = task.complete
+        # data['user_id'] = task.user_id
+        output.append(data)
+
+    return jsonify(tasks=output)
+
+@app.route('/task', methods=["POST"])
+@tocken_required
+def create_task(current_user):
+    data = request.get_json()
+
+    new_task = Todo(text=data['text'], complete=False, user_id=current_user.id)
+    db.session.add(new_task)
+    db.session.commit()
+
+    return jsonify(message='Task created!')
+
+@app.route('/task/<task_id>', methods=["GET"])
+@tocken_required
+def get_one_task(current_user, task_id):
+    task = Todo.query.filter_by(id=task_id, user_id=current_user.id).first()
+
+    if not task:
+        return jsonify(message="No task found!")
+
+    data = {}
+    data['id'] = task.id
+    data['text'] = task.text
+    data['complete'] = task.complete
+    # data['user_id'] = task.user_id
+
+    return jsonify(task=data)
+
+@app.route('/task/<task_id>', methods=["Put"])
+@tocken_required
+def edit_task(current_user, task_id):
+    task = Todo.query.filter_by(id=task_id, user_id=current_user.id).first()
+
+    if not task:
+        return jsonify(message="No task found!")
+    
+    data = request.get_json()
+
+    task.text = data['text']
+    task.complete = data['complete']
+
+    db.session.commit()
+
+    return jsonify(message="Task edited!")
+
+@app.route('/task/<task_id>', methods=["DELETE"])
+@tocken_required
+def delete_task(current_user, task_id):
+    task = Todo.query.filter_by(id=task_id, user_id=current_user.id).first()
+
+    if not task:
+        return jsonify(message="No task found!")
+
+    db.session.delete(task)
+    db.session.commit()
+
+    return jsonify(message="Task deleted!")
+
+@app.route('/task/<task_id>/check', methods=["Put"])
+@tocken_required
+def check_task(current_user, task_id):
+    task = Todo.query.filter_by(id=task_id, user_id=current_user.id).first()
+
+    if not task:
+        return jsonify(message="No task found!")
+    
+    data = request.get_json()
+
+    task.complete = not task.complete
+
+    db.session.commit()
+
+    return jsonify(message="Task checked!")
 
 if __name__ == '__main__':
     app.run(debug=True)
