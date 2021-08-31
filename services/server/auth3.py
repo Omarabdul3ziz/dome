@@ -133,6 +133,31 @@ def index():
 def load_user(user_id):
     return User.query.get(user_id)
 
+@app.route('/new_github_login')
+def new_github_login():
+
+    if not github.authorized:
+        return redirect(url_for('github.login'))
+
+    account_info = github.get('/user')
+    if account_info.ok:
+        username = account_info.json()['login']
+
+    user = User.query.filter_by(name=username).first()
+
+    if not user:
+        new_user = User(public_id=str(uuid.uuid4()), name=username, password="", admin=True, token='')
+        db.session.add(new_user)
+        db.session.commit()
+
+    login_user(user)
+
+    # Optinal for now ( make token / not )
+    token = jwt.encode({'public_id': user.public_id, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
+    user.token = token.decode('UTF-8')
+    db.session.commit()
+    return jsonify(message="You are logged in!")
+
 @app.route('/new_login')
 def new_login():
     auth = request.authorization
