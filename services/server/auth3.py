@@ -125,7 +125,7 @@ def logout(current_user):
 
 @app.route('/')
 def index():
-    return '<h1>Homa Page</h1>'
+    return redirect(url_for('get_all_tasks'))
 
 # -------- auth with flask-login -------- #
 
@@ -295,7 +295,7 @@ def delete_user(public_id):
 @login_required
 def get_all_tasks():
 
-    tasks = Todo.query.filter_by(user_id=current_user.id).all()
+    tasks = Todo.query.filter_by(user_id=current_user.public_id).all()
 
     output = []
 
