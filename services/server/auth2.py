@@ -1,10 +1,15 @@
-from flask import Flask, json, request, jsonify, make_response
+from flask import Flask, json, request, jsonify, make_response, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
 import datetime
 import jwt
 from functools import wraps
+
+from flask_dance.contrib.github import make_github_blueprint, github
+import os
+
+from werkzeug.utils import redirect
 
 app = Flask(__name__)
 
@@ -13,6 +18,19 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///./todo.db'
 
 db = SQLAlchemy()
 db.init_app(app) # db.create_all(app=app)
+
+GITHUB_ID = os.getenv("GITHUB_ID")
+GITHUB_SECRET = os.getenv("GITHUB_SECRET")
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1' # to make oath accept not https requests
+
+GITHUB_ID = 'f999c153151ddfb524ce'
+GITHUB_SECRET = 'a2a5e3f47e20c2fd0afc3729ce732fe26dba419b'
+
+github_blueprint = make_github_blueprint(client_id=GITHUB_ID, client_secret=GITHUB_SECRET )
+
+app.register_blueprint(github_blueprint, url_prefix='/github_login')
+
+# -------- models -------- #
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -48,6 +66,42 @@ def tocken_required(func):
         return func(current_user, *args, **kwargs)
     return wrapper
 
+# -------- auth -------- #
+
+@app.route('/login')
+def login():
+
+    auth = request.authorization
+    if not auth or not auth.username or not auth.password:
+        return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+    
+    user = User.query.filter_by(name=auth.username).first()
+    if not user:
+        return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+
+    if True: # check_password_hash(user.password, auth.password) 
+        # proplem in matching
+        token = jwt.encode({'public_id': user.public_id, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
+        return jsonify(token=token.decode('UTF-8'))
+
+    return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+
+@app.route('/github')
+def github_login():
+    if not github.authorized:
+        return redirect(url_for('github.login'))
+
+    account_info = github.get('/user')
+    if account_info.ok:
+        username = account_info.json()['login']
+        return jsonify(username=username)
+
+    return jsonify(message='Request failed')
+
+@app.route('/')
+def index():
+    return '<h1>Homa Page</h1>'
+    
 # -------- user api -------- #
 
 @app.route('/user', methods=['GET'])
@@ -140,26 +194,6 @@ def delete_user(current_user, public_id):
     db.session.commit()
 
     return jsonify(message="User deleted!")
-
-# -------- auth -------- #
-
-@app.route('/login')
-def login():
-
-    auth = request.authorization
-    if not auth or not auth.username or not auth.password:
-        return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
-    
-    user = User.query.filter_by(name=auth.username).first()
-    if not user:
-        return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
-
-    if True: # check_password_hash(user.password, auth.password) 
-        # proplem in matching
-        token = jwt.encode({'public_id': user.public_id, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
-        return jsonify(token=token.decode('UTF-8'))
-
-    return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
 
 # -------- todo api -------- #
 
