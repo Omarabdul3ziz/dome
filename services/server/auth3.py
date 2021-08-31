@@ -1,4 +1,5 @@
 from flask import Flask, json, request, jsonify, make_response, redirect, url_for
+from flask_login.utils import login_required
 from flask_sqlalchemy import SQLAlchemy
 import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -8,12 +9,12 @@ from functools import wraps
 
 from flask_dance.contrib.github import make_github_blueprint, github
 import os
-from flask_login import logout_user, LoginManager
+from flask_login import logout_user, LoginManager, UserMixin, login_user, login_required, current_user
 
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'secret'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///./task.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///./task2.db'
 
 db = SQLAlchemy()
 db.init_app(app) # db.create_all(app=app)
@@ -29,11 +30,12 @@ github_blueprint = make_github_blueprint(client_id=GITHUB_ID, client_secret=GITH
 
 app.register_blueprint(github_blueprint, url_prefix='/github_login')
 
-login_manager= LoginManager(app)
+login_manager= LoginManager()
+login_manager.init_app(app)
 
 # -------- models -------- #
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     public_id = db.Column(db.String(50), unique=True)
     name = db.Column(db.String(50))
@@ -127,6 +129,29 @@ def logout(current_user):
 def index():
     return '<h1>Homa Page</h1>'
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
+
+@app.route('/new_login')
+def new_login():
+    user = User.query.filter_by(name="Omarabdul3ziz").first()
+    login_user(user)
+    return jsonify(message="You are logged in!")
+
+@app.route('/new_logout')
+@login_required
+def new_logout():
+    logout_user()
+    return jsonify(message="You are logged out!")
+
+@app.route('/home')
+@login_required
+def home():
+    return jsonify(message="Current user is "+ current_user.name)
+
+
+
 # -------- user api -------- #
 
 @app.route('/user', methods=['GET'])
@@ -158,7 +183,7 @@ def create_user():
 
     data = request.get_json()
     hashed_password = generate_password_hash(data['password'], method='sha256')
-    new_user = User(public_id=str(uuid.uuid4()), name=data['name'], password=hashed_password, admin=False, token='')
+    new_user = User(public_id=str(uuid.uuid4()), name=data['name'], password=hashed_password, admin=True, token='')
     db.session.add(new_user)
     db.session.commit()
 
@@ -225,8 +250,8 @@ def delete_user(current_user, public_id):
 # -------- todo api -------- #
 
 @app.route('/task', methods=["GET"])
-@tocken_required
-def get_all_tasks(current_user):
+@login_required
+def get_all_tasks():
 
     tasks = Todo.query.filter_by(user_id=current_user.id).all()
 
@@ -243,8 +268,8 @@ def get_all_tasks(current_user):
     return jsonify(tasks=output)
 
 @app.route('/task', methods=["POST"])
-@tocken_required
-def create_task(current_user):
+@login_required
+def create_task():
     data = request.get_json()
 
     new_task = Todo(text=data['text'], complete=False, user_id=current_user.id)
