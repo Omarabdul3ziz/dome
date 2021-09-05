@@ -102,6 +102,7 @@ class TasksResource(Resource):
     def get(self):
             
         tasks = Task.query.filter(Task.author_id == current_user.id).all()
+        # tasks = Task.query.all()
 
         output = []
         for task in tasks:
@@ -109,7 +110,7 @@ class TasksResource(Resource):
             data['id'] = task.id
             data['text'] = task.text
             data['complete'] = task.complete
-            data['user'] = current_user.name
+            # data['user'] = current_user.name
             output.append(data)
 
         return jsonify(tasks=output)

@@ -45,15 +45,17 @@ def github_login():
 @login_blueprint.route('/login')
 def login():
     auth = request.authorization
-    user = User.query.filter(User.name==auth.username).first()
+    password = auth.password
+    username = auth.username
+    user = User.query.filter(User.name==username).first()
 
-    if not auth or not auth.username or not auth.password:
+    if not auth or not username or not password:
         return make_response('Some auth missing!', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
 
     if not user:
         return make_response('User not found in database!', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
 
-    if user.password != auth.password:
+    if user.password != password:
         return make_response('Wrong password', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
 
     login_user(user)
@@ -73,4 +75,4 @@ def home():
 
 @login_blueprint.route('/') # callback after github login
 def index():
-    return redirect(url_for('tasksresource'))
+    return redirect(url_for('login.github_login'))
