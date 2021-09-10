@@ -10,6 +10,12 @@ GITHUB_SECRET = os.getenv("GITHUB_SECRET")
 
 app = Flask(__name__)
 
+from flask_cors import CORS
+
+CORS(app)
+
+
+
 client = MongoClient('mongodb://localhost:27017/')
 db = client['dome2']
 users = db['users']
@@ -71,9 +77,9 @@ def register():
 @auth_bp.route('/login', methods=['POST'])
 def login():
     # if request.method == 'POST':
-    auth = request.authorization
-    username = auth.username
-    password = auth.password
+    auth = request.get_json()
+    username = auth['username']
+    password = auth['password']
 
     user = users.find_one({'username': username})
     if user is None:
@@ -83,7 +89,9 @@ def login():
     
     session.clear()
     session['username'] = user['username']
-    return redirect(url_for('index'))
+    print(username + password)
+    return jsonify(message="Logged In!")
+    # return redirect(url_for('index'))
 
     # return render_template('login.html')
 
