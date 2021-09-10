@@ -1,6 +1,6 @@
 from flask import Flask, Blueprint, request, session, redirect, url_for, render_template, g, jsonify
 from pymongo import MongoClient
-import functools
+from functools import wraps
 from flask_dance.contrib.github import make_github_blueprint, github
 import os
 
@@ -43,78 +43,81 @@ def github_login():
         
     session.clear()
     session['username'] = user['username']
-    load_logged_in_user()
-    return redirect('/')
+    load_user()
+    return redirect(url_for('index'))
 
 
-@auth_bp.route('/register', methods=['POST', 'GET'])
+@auth_bp.route('/register', methods=['POST'])
 def register():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+    # if request.method == 'POST':
+    auth = request.authorization
+    username = auth.username
+    password = auth.password
 
-        if not username:
-            return 'Username is required.'
-        if not password:
-            return 'Password is required.'
-        
-        user = {'username': username,
-                'password': password,
-                'admin': False}
-
-        users.insert(user)
-        return redirect(url_for("auth.login"))
+    if not username:
+        return 'Username is required.'
+    if not password:
+        return 'Password is required.'
     
-    return render_template("register.html")
+    user = {'username': username,
+            'password': password,
+            'admin': False}
 
-@auth_bp.route('/login', methods=['POST', 'GET'])
+    users.insert(user)
+    return redirect(url_for("auth.login"))
+    
+    # return render_template("register.html")
+
+@auth_bp.route('/login', methods=['POST'])
 def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+    # if request.method == 'POST':
+    auth = request.authorization
+    username = auth.username
+    password = auth.password
 
-        user = users.find_one({'username': username})
-        if user is None:
-            return "No such user."
-        if password != user['password']:
-            return "Wrong password."
-        
-        session.clear()
-        session['username'] = user['username']
-        return redirect(url_for('index'))
+    user = users.find_one({'username': username})
+    if user is None:
+        return "No such user."
+    if password != user['password']:
+        return "Wrong password."
+    
+    session.clear()
+    session['username'] = user['username']
+    return redirect(url_for('index'))
 
-    return render_template('login.html')
+    # return render_template('login.html')
 
 @auth_bp.before_app_request
-def load_logged_in_user():
+def load_user():
     username = session.get('username')
     g.user = users.find_one({'username': username})
 
 
-def login_required(view):
-    @functools.wraps(view)
-    def wrapped_view(**kwargs):
+def login_required(func):
+    @wraps(func)
+    def wrapper(**kwargs):
         if g.user is None:
-            return redirect(url_for('auth.login'))
-
-        return view(**kwargs)
-
-    return wrapped_view
+            return jsonify(message="Login required!")
+            # return redirect(url_for('auth.login'))
+        return func(**kwargs)
+    return wrapper
 
 
 @auth_bp.route('logout')
 @login_required
 def logout():
     session.clear()
-    return redirect(url_for('index'))
+    return jsonify(message='Loged Out!')
+    # return redirect(url_for('index'))
 
 
 @app.route('/')
 @login_required
 def index():
-    # user = g.user
-    
-    return render_template('home.html')
+    user = g.user['username']
+    tasks = {}
+    return jsonify(user=user, tasks=tasks)
+    # return render_template('home.html')
 
 app.register_blueprint(auth_bp)
 
