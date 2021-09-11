@@ -5,6 +5,8 @@ from flask_dance.contrib.github import make_github_blueprint, github
 from werkzeug.wrappers import response
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, JWTManager, unset_jwt_cookies, set_access_cookies
 import os
+from flask_cors import CORS
+
 
 
 GITHUB_ID = os.getenv("GITHUB_ID")
@@ -12,9 +14,8 @@ GITHUB_SECRET = os.getenv("GITHUB_SECRET")
 
 app = Flask(__name__)
 
-from flask_cors import CORS
-
 CORS(app)
+
 jwt = JWTManager(app)
 
 
@@ -59,26 +60,26 @@ def github_login():
     access_token = create_access_token(identity=username)
     
     # default set cookie
-    # response = jsonify(access_token=access_token)
-    # set_access_cookies(response, access_token)
+    response = jsonify(access_token=access_token)
+    set_access_cookies(response, access_token)
 
     # my custome set
-    response = make_response(redirect(url_for("index")))
-    response.set_cookie('access_token_cookie', access_token)
+    # response = make_response(redirect(url_for("index")))
+    # response.set_cookie('access_token_cookie', access_token)
     return response
 
 
 @auth_bp.route('/register', methods=['POST'])
 def register():
     # getting criedentials from BODY
-    # data = request.get_json()
-    # username = data["username"]
-    # password = data["password"]
+    data = request.get_json()
+    username = data["username"]
+    password = data["password"]
 
     # getting criedentials from HEADER
-    auth = request.authorization
-    username = auth.username
-    password = auth.password
+    # auth = request.authorization
+    # username = auth.username
+    # password = auth.password
 
     # creating new user
     user = {'username': username,
@@ -90,25 +91,25 @@ def register():
     access_token = create_access_token(identity=username)
    
     # default set cookie
-    # response = jsonify(access_token=access_token)
-    # set_access_cookies(response, access_token)
+    response = jsonify(access_token=access_token)
+    # set_access_cookies(response, access_token) # make the set from front end
 
     # my custome set
-    response = make_response(redirect(url_for("index")))
+    # response = make_response(redirect(url_for("index")))
     response.set_cookie('access_token_cookie', access_token)
     return response
     
 @auth_bp.route('/login', methods=['POST'])
 def login():
     # getting criedentials from BODY
-    # data = request.get_json()
-    # username = data["username"]
-    # password = data["password"]
+    data = request.get_json()
+    username = data["username"]
+    password = data["password"]
 
     # getting criedentials from HEADER
-    auth = request.authorization
-    username = auth.username
-    password = auth.password
+    # auth = request.authorization
+    # username = auth.username
+    # password = auth.password
 
     # check on existing
     user = users.find_one({'username': username})
@@ -121,11 +122,11 @@ def login():
     access_token = create_access_token(identity=username)
 
     # default set cookie
-    # response = jsonify(access_token=access_token)
-    # set_access_cookies(response, access_token)
+    response = jsonify(access_token=access_token)
+    # set_access_cookies(response, access_token) # make the set from front end
 
     # my custome set
-    response = make_response(redirect(url_for("index")))
+    # response = make_response(redirect(url_for("index")))
     response.set_cookie('access_token_cookie', access_token)
     return response
 

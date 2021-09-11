@@ -1,17 +1,37 @@
 <template>
   <div id="app">
     <div id="nav">
-      <div v-if="loggedIn">
-        <router-link to="/todo">Home</router-link> |
-        <router-link to="/logout">Logout</router-link>
-      </div>
-      <div v-else>
-        <router-link to="/register">Register</router-link> |
-        <router-link to="/login">Login</router-link> |
-        <router-link to="/github">With GitHub</router-link>
-      </div>
+      <nav class="navbar navbar-dark bg-dark">
+        <div class="navbar-collapse">
+          <ul class="navbar-nav">
+            <li>
+              <router-link class="navbar-link" id="left" to="/">Home</router-link>
+            </li>
+            <li v-if="loggedIn">
+              <router-link class="navbar-link" id="left" to="/todo">Todo</router-link>
+            </li>
+            <li v-if="!loggedIn">
+              <router-link class="navbar-link" id="right" to="/register"
+                >Register</router-link
+              >
+            </li>
+            <li v-if="!loggedIn">
+              <router-link class="navbar-link" id="right" to="/login">Login</router-link>
+            </li>
+            <li v-if="!loggedIn">
+              <router-link class="navbar-link" id="right" to="/github">GitHub</router-link>
+            </li>
+            <li v-if="loggedIn">
+              <router-link class="navbar-link" id="right" to="/logout">Logout</router-link>
+            </li>
+          </ul>
+        </div>
+      </nav>
     </div>
 
+    <br />
+    <br />
+    <br />
     <router-view />
   </div>
 </template>
@@ -20,15 +40,23 @@
 export default {
   name: "App",
 
-  data() {
-    return {
-      loggedIn: false,
-    };
+  computed: {
+    loggedIn() {
+      return this.$store.getters.loggedIn;
+    },
   },
 };
 </script>
 
 <style lang="scss">
+#left {
+  float: left;
+  margin-left: 10px;
+}
+#right {
+  float: right;
+  margin-right: 10px;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -38,15 +66,26 @@ export default {
 }
 
 #nav {
-  padding: 30px;
-
   a {
-    font-weight: bold;
-    color: #2c3e50;
+    color: #ffffff;
 
     &.router-link-exact-active {
-      color: #42b983;
+      color: #43aeec;
     }
+  }
+
+  li {
+    text-decoration: none;
+    display: inline;
+    margin: 10px;
+
+  }
+  ul {
+    display: inline;
+  }
+
+  .navbar-link {
+    text-decoration: none;
   }
 }
 </style>
