@@ -1,29 +1,23 @@
 from flask import Flask, request, jsonify, make_response, redirect, url_for, Blueprint
 from flask_dance.contrib.github import make_github_blueprint, github
-from flask_login import LoginManager, login_user, login_required, current_user, logout_user
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, JWTManager, unset_jwt_cookies, set_access_cookies
 
 import os
-import uuid
 
-from model import User
+from model import users
 
 GITHUB_ID = os.getenv("GITHUB_ID")
 GITHUB_SECRET = os.getenv("GITHUB_SECRET")
 
-login_manager = LoginManager()
+
+auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 github_blueprint = make_github_blueprint(client_id=GITHUB_ID, client_secret=GITHUB_SECRET )
-login_blueprint = Blueprint('login', __name__)
 
 #########################################
 ## =============  Auth   ============= ##
 #########################################
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.filter(User.id==user_id).first()
-
-@login_blueprint.route('/github')
+@auth_bp.route('/github')
 def github_login():
 
     if not github.authorized:
@@ -33,46 +27,102 @@ def github_login():
     if account_info.ok:
         username = account_info.json()['login']
 
-    user = User.query.filter(User.name==username).first()
+    # fetch user from db
+    user = users.find_one({'username': username})
 
-    if not user:
-        new_user = User(id=str(uuid.uuid4()), name=username, password="", admin=1)
-        new_user.save()
+    # or create new one
+    if user is None:
+        user = {'username': username,
+                'password': "",
+                'admin': False}
 
-    login_user(user)
-    return jsonify(message="You are logged in!")
+        users.insert(user)
+        
+    # create and respond with token
+    access_token = create_access_token(identity=username)
+    
+    # default set cookie
+    response = jsonify(access_token=access_token)
+    set_access_cookies(response, access_token)
 
-@login_blueprint.route('/login')
+    # my custome set
+    # response = make_response(redirect(url_for("index")))
+    # response.set_cookie('access_token_cookie', access_token)
+    return response
+
+
+@auth_bp.route('/register', methods=['POST'])
+def register():
+    # getting criedentials from BODY
+    data = request.get_json()
+    username = data["username"]
+    password = data["password"]
+
+    # getting criedentials from HEADER
+    # auth = request.authorization
+    # username = auth.username
+    # password = auth.password
+
+    # creating new user
+    user = {'username': username,
+            'password': password,
+            'admin': False}
+    users.insert(user)
+
+    # create and respond with token
+    access_token = create_access_token(identity=username)
+   
+    # default set cookie
+    response = jsonify(access_token=access_token)
+    # set_access_cookies(response, access_token) # make the set from front end
+
+    # my custome set
+    # response = make_response(redirect(url_for("index")))
+    response.set_cookie('access_token_cookie', access_token)
+    return response
+    
+@auth_bp.route('/login', methods=['POST'])
 def login():
-    auth = request.authorization
-    password = auth.password
-    username = auth.username
-    user = User.query.filter(User.name==username).first()
+    # getting criedentials from BODY
+    data = request.get_json()
+    username = data["username"]
+    password = data["password"]
 
-    if not auth or not username or not password:
-        return make_response('Some auth missing!', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+    # getting criedentials from HEADER
+    # auth = request.authorization
+    # username = auth.username
+    # password = auth.password
 
-    if not user:
-        return make_response('User not found in database!', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+    # check on existing
+    user = users.find_one({'username': username})
+    if user is None:
+        return "No such user."
+    if password != user['password']:
+        return "Wrong password."
+    
+    # create token
+    access_token = create_access_token(identity=username)
 
-    if user.password != password:
-        return make_response('Wrong password', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+    # default set cookie
+    response = jsonify(access_token=access_token)
+    # set_access_cookies(response, access_token) # make the set from front end
 
-    login_user(user)
-    return jsonify(message="You are logged in!")
+    # my custome set
+    # response = make_response(redirect(url_for("index")))
+    response.set_cookie('access_token_cookie', access_token)
+    return response
 
-@login_blueprint.route('/logout')
-@login_required
+
+@auth_bp.route('/logout')
+@jwt_required
 def logout():
-    logout_user()
-    return jsonify(message="You are logged out!")
-
-@login_blueprint.route('/profile')
-@login_required
-def home():
-    return jsonify(message="Welcome "+ current_user.name)
+    response = jsonify(message='Logged Out!')
+    unset_jwt_cookies(response)
+    return response, 200
 
 
-@login_blueprint.route('/') # callback after github login
+@auth_bp.route('/')
+@jwt_required
 def index():
-    return redirect(url_for('login.github_login'))
+    current_user = get_jwt_identity()
+    return jsonify(logged_in_as=current_user), 200
