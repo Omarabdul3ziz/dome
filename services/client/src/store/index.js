@@ -7,27 +7,24 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     token: localStorage.getItem("access_token") || null,
-    access_token_cookie: Vue.$cookies.get("access_token_cookie") || null,
+    // access_token_cookie: Vue.$cookies.get("access_token_cookie") || null,
     api_url: "http://localhost:8080",
   },
   mutations: {
     updateToken(state, token) {
-      // state.token = token;
-      state.access_token_cookie = token;
+      state.token = token;
+      // state.access_token_cookie = token;
     },
     distroyToken(state) {
-      // state.token = null;
-      state.access_token_cookie = null;
-
+      state.token = null;
+      // state.access_token_cookie = null;
     },
   },
   actions: {},
   modules: {},
   getters: {
     loggedIn(state) {
-      // return state.token != null;
-      return state.access_token_cookie != null;
-
+      return state.token != null;
     },
   },
 });

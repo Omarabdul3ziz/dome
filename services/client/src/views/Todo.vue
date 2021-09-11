@@ -9,37 +9,40 @@
         @keyup.enter="addTodo"
       />
       <!-- List -->
-      <div class="container todo-list">
-        <div v-for="(todo, index) in todos" :key="todo.id" class="todo-item">
-          <dir class="todo-item-left">
-            <input
-              type="checkbox"
-              v-model="todo.complete"
-              @click="updateStatus(todo, index)"
-            />
-            <div
-              v-if="!todo.editing"
-              @dblclick="editTodo(todo, index)"
-              class="todo-item-label"
-              :class="{ complete: todo.complete }"
-            >
-              {{ todo.text }}
+      <div class="container">
+        <div class="todo-list">
+          <div v-for="(todo, index) in todos" :key="todo.id" class="todo-item">
+            <div class="todo-item-left">
+              <input
+                type="checkbox"
+                v-model="todo.complete"
+                @click="updateStatus(todo, index)"
+              />
+              <div
+                v-if="!todo.editing"
+                @dblclick="editTodo(todo, index)"
+                class="todo-item-label"
+                :class="{ complete: todo.complete }"
+              >
+                {{ todo.text }}
+              </div>
+              <input
+                v-else
+                class="todo-item-edit"
+                type="text"
+                v-model="todo.text"
+                @blur="doneEdit(todo, index)"
+                @keyup.enter="doneEdit(todo, index)"
+                @keyup.esc="doneEdit(todo)"
+                v-focus
+              />
             </div>
-            <input
-              v-else
-              class="todo-item-edit"
-              type="text"
-              v-model="todo.text"
-              @blur="doneEdit(todo, index)"
-              @keyup.enter="doneEdit(todo, index)"
-              @keyup.esc="doneEdit(todo)"
-              v-focus
-            />
-          </dir>
 
-          <div class="remove-item" @click="removeTodo(index)">&times;</div>
+            <div class="remove-item" @click="removeTodo(index)">&times;</div>
+          </div>
         </div>
       </div>
+
       <!-- End list -->
     </div>
   </div>
@@ -59,9 +62,8 @@ export default {
     return {
       newTodo: "",
       idForTodo: "",
-      baseUrl: process.env.VUE_APP_ROOT_API,
-
       todos: [],
+      baseUrl: this.$store.state.api_url + "/task",
     };
   },
 
@@ -79,14 +81,17 @@ export default {
 
   methods: {
     getTodos() {
-      const path = this.baseUrl + "/task";
+      const path = this.baseUrl;
+      axios.defaults.headers.common["Authorization"] =
+        "Bearer " + this.$store.state.token;
+
       Vue.axios.get(path).then((res) => {
         res.data["tasks"].forEach((todo) => {
           this.todos.push({
-            id: todo.id,
+            id: todo._id,
             text: todo.text,
             complete: todo.complete,
-            user: todo.user,
+            author: todo.author,
             editing: false,
           });
         });
@@ -100,9 +105,8 @@ export default {
 
       const path = this.baseUrl;
       var newEntry = {
-        title: this.newTodo,
-        status: false,
-        due: 0,
+        text: this.newTodo,
+        complete: false,
         editing: false,
       };
       Vue.axios
@@ -110,12 +114,13 @@ export default {
         .then((response) => (this.idForTodo = response.data.id))
         .then(this.todos.push(newEntry));
       this.newTodo = "";
-      this.idForTodo++;
     },
 
     removeTodo(index) {
+      var task_id = this.todos[index]["id"];
       this.todos.splice(index, 1);
-      const path = this.baseUrl + "/" + index;
+      // console.log(task_id);
+      const path = this.baseUrl + "/" + task_id;
       Vue.axios.delete(path);
     },
 
@@ -124,8 +129,9 @@ export default {
     },
 
     updateTodo(todo, index) {
-      const path = this.baseUrl + "/" + index;
-      Vue.axios.put(path, { title: todo.title });
+      var task_id = this.todos[index]["id"];
+      const path = this.baseUrl + "/" + task_id;
+      Vue.axios.put(path, { text: todo.text });
     },
 
     doneEdit(todo, index) {
@@ -134,8 +140,9 @@ export default {
     },
 
     updateStatus(todo, index) {
-      const path = this.baseUrl + "/" + index + "/check";
-      Vue.axios.put(path, { status: !todo.status }); // i think it takes the value before changing so i NOT it
+      var task_id = this.todos[index]["id"];
+      const path = this.baseUrl + "/" + task_id + "/check";
+      Vue.axios.put(path, { complete: !todo.complete }); // i think it takes the value before changing so i NOT it
     },
   },
 };
@@ -186,7 +193,7 @@ export default {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
 }
 
-.status {
+.complete {
   text-decoration: line-through;
   color: grey;
 }

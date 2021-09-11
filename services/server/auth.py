@@ -114,7 +114,7 @@ def login():
 
 
 @auth_blueprint.route('/logout')
-@jwt_required
+@jwt_required()
 def logout():
     response = jsonify(message='Logged Out!')
     unset_jwt_cookies(response)

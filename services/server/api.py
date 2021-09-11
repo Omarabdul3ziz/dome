@@ -13,7 +13,7 @@ api = Api()
 
 
 class TasksResource(Resource):
-    @jwt_required
+    @jwt_required()
     def get(self):
         current_user = get_jwt_identity()
         current_user = users.find_one({"username": current_user})
@@ -30,7 +30,7 @@ class TasksResource(Resource):
 
         return jsonify(tasks=output)
 
-    @jwt_required
+    @jwt_required()
     def post(self):
         current_user = get_jwt_identity()
         current_user = users.find_one({"username": current_user})
@@ -44,7 +44,7 @@ class TasksResource(Resource):
 
 
 class TaskResource(Resource):
-    @jwt_required
+    @jwt_required()
     def get(self, task_id):
 
         current_user = get_jwt_identity()
@@ -62,7 +62,7 @@ class TaskResource(Resource):
 
         return jsonify(task=data)
 
-    @jwt_required
+    @jwt_required()
     def put(self, task_id):
 
         current_user = get_jwt_identity()
@@ -79,7 +79,7 @@ class TaskResource(Resource):
 
         return jsonify(message="Task edited!")
 
-    @jwt_required
+    @jwt_required()
     def delete(self, task_id):
 
         current_user = get_jwt_identity()
@@ -95,7 +95,7 @@ class TaskResource(Resource):
 
 
 class Status(Resource):
-    @jwt_required
+    @jwt_required()
     def put(self, task_id):
         current_user = get_jwt_identity()
         current_user = users.find_one({"username": current_user})

@@ -5,10 +5,14 @@
         <div class="navbar-collapse">
           <ul class="navbar-nav">
             <li>
-              <router-link class="navbar-link" id="left" to="/">Home</router-link>
+              <router-link class="navbar-link" id="left" to="/"
+                >Home</router-link
+              >
             </li>
             <li v-if="loggedIn">
-              <router-link class="navbar-link" id="left" to="/todo">Todo</router-link>
+              <router-link class="navbar-link" id="left" to="/todo"
+                >Todo</router-link
+              >
             </li>
             <li v-if="!loggedIn">
               <router-link class="navbar-link" id="right" to="/register"
@@ -16,13 +20,19 @@
               >
             </li>
             <li v-if="!loggedIn">
-              <router-link class="navbar-link" id="right" to="/login">Login</router-link>
+              <router-link class="navbar-link" id="right" to="/login"
+                >Login</router-link
+              >
             </li>
             <li v-if="!loggedIn">
-              <router-link class="navbar-link" id="right" to="/github">GitHub</router-link>
+              <router-link class="navbar-link" id="right" to="/github"
+                >GitHub</router-link
+              >
             </li>
             <li v-if="loggedIn">
-              <router-link class="navbar-link" id="right" to="/logout">Logout</router-link>
+              <router-link class="navbar-link" id="right" to="/logout"
+                >Logout</router-link
+              >
             </li>
           </ul>
         </div>
@@ -49,6 +59,14 @@ export default {
 </script>
 
 <style lang="scss">
+* {
+  box-sizing: border-box;
+}
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
 #left {
   float: left;
   margin-left: 10px;
@@ -78,7 +96,6 @@ export default {
     text-decoration: none;
     display: inline;
     margin: 10px;
-
   }
   ul {
     display: inline;

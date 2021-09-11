@@ -51,7 +51,7 @@ export default {
         console.log(token);
 
         // add to local storage
-        // localStorage.setItem("access_token", token); // token stores in cookies
+        localStorage.setItem("access_token", token); // token stores in cookies
 
         // update the store state token
         this.$store.commit("updateToken", token);

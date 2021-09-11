@@ -20,7 +20,7 @@
         />
       </div>
       <div>
-        <button type="submit" class="btn btn-primary">Login</button>
+        <button type="submit" class="btn btn-primary">Register</button>
       </div>
     </form>
   </div>
@@ -49,9 +49,15 @@ export default {
       const auth = { username: this.username, password: this.password };
       Vue.axios.post(path, auth).then((response) => {
         const token = response.data.access_token;
-        localStorage.setItem("access_token", token);
-        this.$store.commit("updateToken", token);
         console.log(token);
+
+        // add to local storage
+        localStorage.setItem("access_token", token);
+
+        // update the store state token
+        this.$store.commit("updateToken", token);
+
+        // redirect for next route
         this.$router.push({ name: "Todo" });
       });
     },

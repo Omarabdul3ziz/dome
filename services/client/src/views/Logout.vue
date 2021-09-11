@@ -31,7 +31,7 @@ export default {
 
         // remove token from localStorage
         // localStorage.removeItem("access-token");
-        // localStorage.clear() // not the best practice but workes for now
+        localStorage.clear(); // not the best practice but workes for now
 
         // remove the token from store state
         this.$store.commit("distroyToken");
