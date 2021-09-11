@@ -10,7 +10,7 @@ GITHUB_ID = os.getenv("GITHUB_ID")
 GITHUB_SECRET = os.getenv("GITHUB_SECRET")
 
 
-auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
+auth_bp = Blueprint('auth', __name__)
 
 github_blueprint = make_github_blueprint(client_id=GITHUB_ID, client_secret=GITHUB_SECRET )
 

@@ -28,4 +28,4 @@ app.config['JWT_COOKIE_CSRF_PROTECT'] = False # to skip the missing token
 api.init_app(app)
 
 app.register_blueprint(github_blueprint, url_prefix='/login')
-app.register_blueprint(auth_bp)
+app.register_blueprint(auth_bp,  url_prefix='/auth')
