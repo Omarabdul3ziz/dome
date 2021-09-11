@@ -10,14 +10,14 @@ GITHUB_ID = os.getenv("GITHUB_ID")
 GITHUB_SECRET = os.getenv("GITHUB_SECRET")
 
 
-auth_bp = Blueprint('auth', __name__)
+auth_blueprint = Blueprint('auth_blueprint', __name__)
 
 github_blueprint = make_github_blueprint(client_id=GITHUB_ID, client_secret=GITHUB_SECRET )
 
 #########################################
 ## =============  Auth   ============= ##
 #########################################
-@auth_bp.route('/github')
+@auth_blueprint.route('/github')
 def github_login():
 
     if not github.authorized:
@@ -51,7 +51,7 @@ def github_login():
     return response
 
 
-@auth_bp.route('/register', methods=['POST'])
+@auth_blueprint.route('/register', methods=['POST'])
 def register():
     # getting criedentials from BODY
     data = request.get_json()
@@ -81,7 +81,7 @@ def register():
     response.set_cookie('access_token_cookie', access_token)
     return response
     
-@auth_bp.route('/login', methods=['POST'])
+@auth_blueprint.route('/login', methods=['POST'])
 def login():
     # getting criedentials from BODY
     data = request.get_json()
@@ -113,7 +113,7 @@ def login():
     return response
 
 
-@auth_bp.route('/logout')
+@auth_blueprint.route('/logout')
 @jwt_required
 def logout():
     response = jsonify(message='Logged Out!')
@@ -121,8 +121,8 @@ def logout():
     return response, 200
 
 
-@auth_bp.route('/')
-@jwt_required
-def index():
-    current_user = get_jwt_identity()
-    return jsonify(logged_in_as=current_user), 200
+# @auth_blueprint.route('/')
+# @jwt_required
+# def home():
+#     current_user = get_jwt_identity()
+#     return jsonify(logged_in_as=current_user), 200
