@@ -1,8 +1,38 @@
-import Vue from 'vue'
-import App from './App.vue'
+import Vue from "vue";
+import App from "./App.vue";
+import router from "./router";
+import store from "./store";
 
-Vue.config.productionTip = false
+import "bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+
+Vue.config.productionTip = false;
+
+// router guards dones not redirect well but it work
+router.beforeEach((to, from, next) => {
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if (!store.getters.loggedIn) {
+      next({
+        name: "Login",
+      });
+    } else {
+      next();
+    }
+  } else if (to.matched.some((record) => record.meta.requiresVisitor)) {
+    if (store.getters.loggedIn) {
+      next({
+        name: "Home",
+      });
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
+});
 
 new Vue({
-  render: h => h(App),
-}).$mount('#app')
+  router,
+  store,
+  render: (h) => h(App),
+}).$mount("#app");

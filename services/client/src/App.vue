@@ -1,51 +1,108 @@
 <template>
-  <div id="app" class="container">
+  <div id="app">
+    <div id="nav">
+      <nav class="navbar navbar-dark bg-dark">
+        <div class="navbar-collapse">
+          <ul class="navbar-nav">
+            <li>
+              <router-link class="navbar-link" id="left" to="/"
+                >Home</router-link
+              >
+            </li>
+            <li v-if="loggedIn">
+              <router-link class="navbar-link" id="left" to="/todo"
+                >Todo</router-link
+              >
+            </li>
+            <li v-if="!loggedIn">
+              <router-link class="navbar-link" id="right" to="/register"
+                >Register</router-link
+              >
+            </li>
+            <li v-if="!loggedIn">
+              <router-link class="navbar-link" id="right" to="/login"
+                >Login</router-link
+              >
+            </li>
+            <li v-if="!loggedIn">
+              <router-link class="navbar-link" id="right" to="/github"
+                >GitHub</router-link
+              >
+            </li>
+            <li v-if="loggedIn">
+              <router-link class="navbar-link" id="right" to="/logout"
+                >Logout</router-link
+              >
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
 
-    <img alt="Vue logo" src="./assets/logo.png" class="logo">
-
-    <todo-list/>
-
+    <br />
+    <br />
+    <br />
+    <router-view />
   </div>
 </template>
 
 <script>
-
-import TodoList from './components/TodoList.vue'
-
-
 export default {
-  name: 'App',
-  components: {
-    TodoList
-  }
-}
+  name: "App",
 
+  computed: {
+    loggedIn() {
+      return this.$store.getters.loggedIn;
+    },
+  },
+};
 </script>
 
-<style>
-
+<style lang="scss">
 * {
   box-sizing: border-box;
 }
-
 .container {
   max-width: 600px;
   margin: 0 auto;
 }
 
-.logo {
-  display: block;
-  margin: 20px auto;
-  height: 75px;
+#left {
+  float: left;
+  margin-left: 10px;
 }
-
+#right {
+  float: right;
+  margin-right: 10px;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
-  font-size: 20px;
 }
 
+#nav {
+  a {
+    color: #ffffff;
+
+    &.router-link-exact-active {
+      color: #43aeec;
+    }
+  }
+
+  li {
+    text-decoration: none;
+    display: inline;
+    margin: 10px;
+  }
+  ul {
+    display: inline;
+  }
+
+  .navbar-link {
+    text-decoration: none;
+  }
+}
 </style>

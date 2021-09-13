@@ -1,30 +1,33 @@
 from flask import Flask
 from flask_cors import CORS
 
-from model import db
+import os 
+
 from api import api
-from auth import login_blueprint, github_blueprint, login_manager
+from auth import  github_blueprint, auth_blueprint, JWTManager
+from model import DATABASE_URL
 
 
 app = Flask(__name__)
+
+
 CORS(app)
 
-app.config['SECRET_KEY'] = 'secret'
+jwt = JWTManager(app)
 
+SECRET_KEY = os.getenv("SECRET_KEY")
 
-######## Db url and path
-# MONGO_INITDB_ROOT_USERNAME = os.environ.get('MONGO_INITDB_ROOT_USERNAME')
-# MONGO_INITDB_ROOT_PASSWORD = os.environ.get('MONGO_INITDB_ROOT_PASSWORD')
-# DATABASE_URL = f'mongodb://{MONGO_INITDB_ROOT_USERNAME}:{MONGO_INITDB_ROOT_PASSWORD}@mongo:27017'
+app.config['SECRET_KEY'] = SECRET_KEY
 
-DATABASE_URL = 'mongodb://localhost:27017'
-app.config["MONGOALCHEMY_CONNECTION_STRING"] = DATABASE_URL
-app.config["MONGOALCHEMY_DATABASE"] = 'tasksDb'
+app.config["MONGO_URI"] = DATABASE_URL
 
-db.init_app(app)
-login_manager.init_app(app)
+app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
+app.config["JWT_SECRET_KEY"] = SECRET_KEY  # Change this in your code!
+app.config['JWT_COOKIE_CSRF_PROTECT'] = False # to skip the missing token 
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = False
+app.config['JWT_COOKIE_DOMAIN'] = 'dome.vue'
 
 api.init_app(app)
-app.register_blueprint(login_blueprint)
-app.register_blueprint(github_blueprint, url_prefix='/login')
 
+app.register_blueprint(github_blueprint, url_prefix='/login')
+app.register_blueprint(auth_blueprint,  url_prefix='/auth')
