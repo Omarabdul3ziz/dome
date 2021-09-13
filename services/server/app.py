@@ -24,6 +24,8 @@ app.config["MONGO_URI"] = DATABASE_URL
 app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
 app.config["JWT_SECRET_KEY"] = SECRET_KEY  # Change this in your code!
 app.config['JWT_COOKIE_CSRF_PROTECT'] = False # to skip the missing token 
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = False
+app.config['JWT_COOKIE_DOMAIN'] = 'dome.vue'
 
 api.init_app(app)
 

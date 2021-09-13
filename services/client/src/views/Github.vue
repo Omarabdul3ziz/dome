@@ -1,5 +1,17 @@
 <template>
-  <div></div>
+  <div>
+    <div>
+      <button type="submit" class="btn btn-primary">
+        <a href="http://127.0.0.1:5000/auth/github">Login with GitHub</a>
+      </button>
+    </div>
+    <br />
+    <div>
+      <button type="submit" class="btn btn-primary" @click="githubLogin">
+        Login with GitHub
+      </button>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -16,9 +28,14 @@ export default {
     };
   },
   created() {
-    this.githubLogin();
+    // this.githubLogin();
   },
   methods: {
+    fetchTocken() {
+      const path = this.baseUrl + "/auth/github";
+      fetch(path).then((response) => console.log(response));
+    },
+
     githubLogin() {
       const path = this.baseUrl + "/auth/github";
       Vue.axios.get(path).then((response) => {
@@ -38,3 +55,14 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+a {
+  text-decoration: none;
+  color: white;
+}
+a:hover {
+  text-decoration: none;
+  color: white;
+}
+</style>

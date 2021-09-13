@@ -21,9 +21,9 @@ const routes = [
     path: "/todo",
     name: "Todo",
     component: Todo,
-    meta: {
-      requiresAuth: true,
-    },
+    // meta: {
+    //   requiresAuth: true,
+    // },
   },
   {
     path: "/login",
