@@ -58,13 +58,13 @@ def callback():
 
     return response.json()
 
-session_opts = {
-    'session.type': 'file',
-    "session.data_dir": "./data",
-    "session.auto": True
-}
+# session_opts = {
+#     'session.type': 'file',
+#     "session.data_dir": "./data",
+#     "session.auto": True
+# }
 
-wsgi_app = SessionMiddleware(app, session_opts)
+# wsgi_app = SessionMiddleware(app, session_opts)
 
 if __name__ == '__main__':
     app.run(debug=True)
