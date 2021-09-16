@@ -1,24 +1,20 @@
-from flask import Flask, request, json, session
-import requests
-from urllib.parse import urlencode
+from flask import Flask, request, json, session, redirect
 from beaker.middleware import SessionMiddleware
+from urllib.parse import urlencode
 from uuid import uuid4
-
-from werkzeug.utils import redirect
+import requests
+import os
 
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "secret"
 
 
+# APIs URL
 PROXY_OAUTH_SERVER_URL = "http://127.0.0.1:9000"
-
 HOST_URL = 'https://login.threefold.me'
-KYC_URL = 'https://openkyc.staging.jimber.org'
 
-USER_ID = 'omarabdul3ziz.3bot'
-SEED_PHRASE = "dinner test old limit mass brief desk decline clarify scene strike accident olympic meadow click nuclear avocado outside share excite rookie snow adapt blast"
-
+# App info
 APP_ID = '127.0.0.1:5000'
 REDIRECT_ROUTE = "/callback"
 
