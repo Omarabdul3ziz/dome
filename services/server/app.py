@@ -4,7 +4,7 @@ from flask_cors import CORS
 import os 
 
 from api import api
-from auth import  github_blueprint, auth_blueprint, JWTManager
+from auth import  github_blueprint, auth_blueprint, tribot_bp, JWTManager
 from model import DATABASE_URL
 
 
@@ -17,7 +17,7 @@ jwt = JWTManager(app)
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
-app.config['SECRET_KEY'] = SECRET_KEY
+app.config['SECRET_KEY'] = "SECRET_KEY"
 
 app.config["MONGO_URI"] = DATABASE_URL
 
@@ -31,3 +31,4 @@ api.init_app(app)
 
 app.register_blueprint(github_blueprint, url_prefix='/login')
 app.register_blueprint(auth_blueprint,  url_prefix='/auth')
+app.register_blueprint(tribot_bp,  url_prefix='/3bot')

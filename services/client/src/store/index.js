@@ -8,7 +8,7 @@ export default new Vuex.Store({
   state: {
     token: localStorage.getItem("access_token") || null,
     // access_token_cookie: Vue.$cookies.get("access_token_cookie") || null,
-    api_url: "http://localhost:8080",
+    api_url: "http://127.0.0.1:8080",
   },
   mutations: {
     updateToken(state, token) {

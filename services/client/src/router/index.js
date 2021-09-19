@@ -6,6 +6,7 @@ import Todo from "@/views/Todo.vue";
 import Login from "@/views/Login.vue";
 import Register from "@/views/Register.vue";
 import Github from "@/views/Github.vue";
+import Tribot from "@/views/Tribot.vue";
 import Logout from "@/views/Logout.vue";
 
 Vue.use(VueRouter);
@@ -21,9 +22,9 @@ const routes = [
     path: "/todo",
     name: "Todo",
     component: Todo,
-    // meta: {
-    //   requiresAuth: true,
-    // },
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: "/login",
@@ -45,6 +46,14 @@ const routes = [
     path: "/github",
     name: "Github",
     component: Github,
+    meta: {
+      requiresVisitor: true,
+    },
+  },
+  {
+    path: "/tribot",
+    name: "Tribot",
+    component: Tribot,
     meta: {
       requiresVisitor: true,
     },
