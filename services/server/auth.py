@@ -89,7 +89,7 @@ def callback():
     # create and respond with token
     access_token = create_access_token(identity=username)
 
-    response = make_response(redirect("http://localhost:8080/todo"))
+    response = make_response(redirect("http://127.0.0.1:8080/todo"))
     response.set_cookie("access_token_cookie", access_token)
     return response
 

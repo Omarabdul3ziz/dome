@@ -36,3 +36,13 @@ new Vue({
   store,
   render: (h) => h(App),
 }).$mount("#app");
+
+// Does it help?
+const allowCrossDomain = function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "*");
+  res.header("Access-Control-Allow-Headers", "*");
+  next();
+};
+
+Vue.use(allowCrossDomain);
