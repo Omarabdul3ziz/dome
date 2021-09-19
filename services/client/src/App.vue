@@ -29,6 +29,11 @@
                 >GitHub</router-link
               >
             </li>
+            <li v-if="!loggedIn">
+              <router-link class="navbar-link" id="right" to="/tribot"
+                >3Bot</router-link
+              >
+            </li>
             <li v-if="loggedIn">
               <router-link class="navbar-link" id="right" to="/logout"
                 >Logout</router-link

@@ -15,7 +15,8 @@ GITHUB_SECRET = os.getenv("GITHUB_SECRET")
 auth_blueprint = Blueprint('auth_blueprint', __name__)
 tribot_bp = Blueprint('threebot_blueprint', __name__)
 
-github_blueprint = make_github_blueprint(client_id=GITHUB_ID, client_secret=GITHUB_SECRET )
+github_blueprint = make_github_blueprint(
+    client_id=GITHUB_ID, client_secret=GITHUB_SECRET)
 
 #########################################
 ## ==========  3 bot Auth   ========== ##
@@ -29,13 +30,15 @@ HOST_URL = 'https://login.threefold.me'
 APP_ID = '127.0.0.1:5000'
 REDIRECT_ROUTE = "/3bot/callback"
 
+
 def generate_login_url():
 
     state = str(uuid4()).replace("-", "")
     session["state"] = state
 
     response = requests.get(f"{PROXY_OAUTH_SERVER_URL}/pubkey")
-    response.raise_for_status() # will raise an HTTPError if the HTTP request returned an unsuccessful status code
+    # will raise an HTTPError if the HTTP request returned an unsuccessful status code
+    response.raise_for_status()
     data = response.json()
     pubkey = data["publickey"].encode()
 
@@ -50,9 +53,11 @@ def generate_login_url():
     url_params = urlencode(params)
     return f"{HOST_URL}?{url_params}"
 
+
 @tribot_bp.route("/login")
-def login():
+def tribot_login():
     return redirect(generate_login_url())
+
 
 @tribot_bp.route("/callback")
 def callback():
@@ -80,22 +85,19 @@ def callback():
                 'admin': False}
 
         users.insert(user)
-        
+
     # create and respond with token
     access_token = create_access_token(identity=username)
-    
-    # default set cookie
-    response = jsonify(access_token=access_token)
-    set_access_cookies(response, access_token)
 
-    # my custome set
-    # response = make_response(redirect(url_for("index")))
-    # response.set_cookie('access_token_cookie', access_token)
+    response = make_response(redirect("http://localhost:8080/todo"))
+    response.set_cookie("access_token_cookie", access_token)
     return response
 
 #########################################
 ## =========  github Auth   ========== ##
 #########################################
+
+
 @auth_blueprint.route('/github')
 def github_login():
 
@@ -116,10 +118,10 @@ def github_login():
                 'admin': False}
 
         users.insert(user)
-        
+
     # create and respond with token
     access_token = create_access_token(identity=username)
-    
+
     # default set cookie
     response = jsonify(access_token=access_token)
     set_access_cookies(response, access_token)
@@ -132,6 +134,8 @@ def github_login():
 #########################################
 ## ==========  basic Auth   ========== ##
 #########################################
+
+
 @auth_blueprint.route('/register', methods=['POST'])
 def register():
     # getting criedentials from BODY
@@ -152,7 +156,7 @@ def register():
 
     # create and respond with token
     access_token = create_access_token(identity=username)
-   
+
     # default set cookie
     response = jsonify(access_token=access_token)
     # set_access_cookies(response, access_token) # make the set from front end
@@ -161,7 +165,8 @@ def register():
     # response = make_response(redirect(url_for("index")))
     response.set_cookie('access_token_cookie', access_token)
     return response
-    
+
+
 @auth_blueprint.route('/login', methods=['POST'])
 def login():
     # getting criedentials from BODY
@@ -180,7 +185,7 @@ def login():
         return "No such user."
     if password != user['password']:
         return "Wrong password."
-    
+
     # create token
     access_token = create_access_token(identity=username)
 
