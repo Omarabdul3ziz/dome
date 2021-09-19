@@ -108,6 +108,17 @@ def github_login():
     if account_info.ok:
         username = account_info.json()['login']
 
+    params = {
+        "username": username,
+    }
+
+    url_params = urlencode(params)
+    return redirect(f"https://127.0.0.1:5000/auth/callback?{url_params}")
+
+@auth_blueprint.route('/callback')
+def github_callback():
+    username = request.args.get("username")
+
     # fetch user from db
     user = users.find_one({'username': username})
 
@@ -123,12 +134,16 @@ def github_login():
     access_token = create_access_token(identity=username)
 
     # default set cookie
-    response = jsonify(access_token=access_token)
-    set_access_cookies(response, access_token)
+    # response = jsonify(access_token=access_token)
+    # set_access_cookies(response, access_token)
 
-    # my custome set
-    # response = make_response(redirect(url_for("index")))
-    # response.set_cookie('access_token_cookie', access_token)
+    # # my custome set
+    # # response = make_response(redirect(url_for("index")))
+    # # response.set_cookie('access_token_cookie', access_token)
+    # return response
+
+    response = make_response(redirect("http://127.0.0.1:8080/"))
+    response.set_cookie("access_token_cookie", access_token)
     return response
 
 #########################################
