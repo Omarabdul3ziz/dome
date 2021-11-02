@@ -2,7 +2,8 @@
 
 Do Me or dome like done. Is a minimal to-do web app written with a combination of various technologies.
 It is supposed to be a handon project in the learning journey of web technologies.
-Find useful personal notes on Notion (WIP).
+
+- Find useful personal notes on Notion (WIP).
 
 ### Used technologies
 
