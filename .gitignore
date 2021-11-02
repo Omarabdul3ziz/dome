@@ -13,3 +13,5 @@ repo_*
 *.so
 *.dylib
 *.dll
+
+server
