@@ -1,56 +1,15 @@
-# README.md
+# Dome-go
+Refactoing of [Dome](https://github.com/Omarabdul3ziz/dome) with Golang
 
-# Do me!
+### Requirments
 
-Dome ...like Done!
+Make sure you have the following: 
+1. Go
+2. Node, npm, vue
+3. Mongo
 
-To-do List app with ( Flask - MongoDB - Vue.js ) stack, each service containerized and pushed to [docker hub](https://hub.docker.com/u/omarabdul3ziz), And the repo has the configurations to deploy with Kubernetes.
+### Usage
 
-**For Testing:**
-
-- Download the src
-
-    ```bash
-    git clone https://github.com/Omarabdul3ziz/dome.git
-    cd dome/
-    ```
-
-- Start minikube cluster
-
-    ```bash
-    minikube start
-    ```
-
-- Run the bash script
-
-    It will download the images from public registry
-
-    ```bash
-    sh deploy.sh
-    ```
-
-- Open your browser and go to [http://do.me/](http://do.me/)
-
-
-
-
-**Helm**
-
-- Install from `.tgz` file
-
-    It will download the images from public registry
-
-    ```bash
-    helm install dome-chart ./dome-0.1.0.tgz
-    ```
-
-
-- Add path to hosts 
-
-    ```bash
-    echo "$(minikube ip) do.me" | sudo tee -a /etc/hosts
-    ```
-
-    
-
-- Open your browser and go to [http://do.me/](http://do.me/)
+```
+sh start.sh
+```

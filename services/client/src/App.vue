@@ -1,42 +1,17 @@
 <template>
   <div id="app">
     <div id="nav">
-      <nav class="navbar navbar-dark bg-dark">
-        <div class="navbar-collapse">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <ul class="navbar-nav">
             <li>
               <router-link class="navbar-link" id="left" to="/"
                 >Home</router-link
               >
             </li>
-            <li v-if="loggedIn">
+            <li>
               <router-link class="navbar-link" id="left" to="/todo"
                 >Todo</router-link
-              >
-            </li>
-            <li v-if="!loggedIn">
-              <router-link class="navbar-link" id="right" to="/register"
-                >Register</router-link
-              >
-            </li>
-            <li v-if="!loggedIn">
-              <router-link class="navbar-link" id="right" to="/login"
-                >Login</router-link
-              >
-            </li>
-            <li v-if="!loggedIn">
-              <router-link class="navbar-link" id="right" to="/github"
-                >GitHub</router-link
-              >
-            </li>
-            <li v-if="!loggedIn">
-              <router-link class="navbar-link" id="right" to="/tribot"
-                >3Bot</router-link
-              >
-            </li>
-            <li v-if="loggedIn">
-              <router-link class="navbar-link" id="right" to="/logout"
-                >Logout</router-link
               >
             </li>
           </ul>
@@ -54,22 +29,12 @@
 <script>
 export default {
   name: "App",
-
-  computed: {
-    loggedIn() {
-      return this.$store.getters.loggedIn;
-    },
-  },
 };
 </script>
 
-<style lang="scss">
+<style>
 * {
   box-sizing: border-box;
-}
-.container {
-  max-width: 600px;
-  margin: 0 auto;
 }
 
 #left {
@@ -88,26 +53,16 @@ export default {
   color: #2c3e50;
 }
 
-#nav {
-  a {
-    color: #ffffff;
+li {
+  text-decoration: none;
+  display: inline;
+  margin: 10px;
+}
+ul {
+  display: inline;
+}
 
-    &.router-link-exact-active {
-      color: #43aeec;
-    }
-  }
-
-  li {
-    text-decoration: none;
-    display: inline;
-    margin: 10px;
-  }
-  ul {
-    display: inline;
-  }
-
-  .navbar-link {
-    text-decoration: none;
-  }
+.navbar-link {
+  text-decoration: none;
 }
 </style>
