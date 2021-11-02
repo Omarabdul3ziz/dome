@@ -23,4 +23,4 @@ Find useful personal notes on Notion (WIP).
 
 - Written in (Flask, MongoDB, Vue) [here](#)
 - Written in (Mux, MongoDB, Vue) [here](#)
-- Written in (Vweb, MongoDB, Vue) [here](#)
+- Written in (Vweb, SQLite, Vue) [here](#)
