@@ -21,6 +21,6 @@ Find useful personal notes on Notion (WIP).
 
 ### Working version
 
-- Written in (Flask, MongoDB, Vue) [here](https://github.com/Omarabdul3ziz/dome/tree/v1.0)
-- Written in (Mux, MongoDB, Vue) [here](https://github.com/Omarabdul3ziz/dome/tree/v2.0)
-- Written in (Vweb, SQLite, Vue) [here](https://github.com/Omarabdul3ziz/dome/tree/v3.0)
+- Written in (Flask, MongoDB, Vue) [here](https://github.com/Omarabdul3ziz/dome/tree/v1.0){:target="_blank"}
+- Written in (Mux, MongoDB, Vue) [here](https://github.com/Omarabdul3ziz/dome/tree/v2.0){:target="_blank"}
+- Written in (Vweb, SQLite, Vue) [here](https://github.com/Omarabdul3ziz/dome/tree/v3.0){:target="_blank"}
