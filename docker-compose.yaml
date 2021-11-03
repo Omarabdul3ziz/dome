@@ -1,0 +1,30 @@
+version: "3"
+services:
+  api:
+    build: ./server
+    container_name: api
+    ports:
+      - 5000:5000
+    volumes:
+      - ./server:/app
+      - ./database:/database
+    networks:
+      default:
+        aliases:
+          - ui
+
+  ui:
+    build: ./client
+    container_name: ui
+    ports:
+      - 8080:8080
+    volumes:
+      - ./client:/app
+    # depends_on:
+    #   - api
+    # links:
+    #   - api
+    networks:
+      default:
+        aliases:
+          - api

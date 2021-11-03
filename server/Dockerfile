@@ -1,6 +1,6 @@
 FROM thevlang/vlang:alpine
 
-WORKDIR /opt/vlang/app
+WORKDIR /app
 
 COPY . .
 
