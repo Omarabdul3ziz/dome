@@ -30,6 +30,6 @@ It is supposed to be a handon project in my learning journey of web technologies
 - Kubernetes: [Notes](https://robust-dryosaurus-f97.notion.site/Kubernetes-Notes-d74cefab6a1f483cba979cd6ad818057), [Helm notes](https://robust-dryosaurus-f97.notion.site/Helm-Notes-3def7d90ede14ce5b6f6c9c15886cdab).
 
 
-<hr style="border:2px solid gray"></hr>
+<hr style="border:2px solid gray">
 
 [__](https://github.com/Omarabdul3ziz/dome/projects)
