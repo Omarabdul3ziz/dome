@@ -1,9 +1,13 @@
 # Welcome to DoMe!
 
 Do Me or dome like done. Is a minimal to-do web app written with a combination of various technologies.
-It is supposed to be a handon project in the learning journey of web technologies.
+It is supposed to be a handon project in my learning journey of web technologies.
 
-- Find useful personal notes on Notion (WIP).
+### Working version
+
+- Written in (Flask, MongoDB, Vue) as <a href="https://github.com/Omarabdul3ziz/dome/tree/v1.0" target="_blank">v1.0</a>
+- Written in (Mux, MongoDB, Vue) as <a href="https://github.com/Omarabdul3ziz/dome/tree/v2.0" target="_blank">v2.0</a>
+- Written in (Vweb, SQLite, Vue) as <a href="https://github.com/Omarabdul3ziz/dome/tree/v3.0" target="_blank">v3.0</a>, [v3.1](https://github.com/Omarabdul3ziz/dome/tree/v3.1)
 
 ### Used technologies
 
@@ -20,8 +24,6 @@ It is supposed to be a handon project in the learning journey of web technologie
   - Docker
   - Kubernetes/Helm
 
-### Working version
 
-- Written in (Flask, MongoDB, Vue) as <a href="https://github.com/Omarabdul3ziz/dome/tree/v1.0" target="_blank">v1.0</a>
-- Written in (Mux, MongoDB, Vue) as <a href="https://github.com/Omarabdul3ziz/dome/tree/v2.0" target="_blank">v2.0</a>
-- Written in (Vweb, SQLite, Vue) as <a href="https://github.com/Omarabdul3ziz/dome/tree/v3.0" target="_blank">v3.0</a>, [v3.1](https://github.com/Omarabdul3ziz/dome/tree/v3.1)
+### My personal notes on Notion (WIP).
+- [Docker](https://robust-dryosaurus-f97.notion.site/Docker-KB-6ddd681fdb194e248a6cc87ff859ddc8)
