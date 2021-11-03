@@ -17,7 +17,7 @@ fn init_table(app &App) {
 
 fn main() {
 	app := App{
-		db: sqlite.connect('../database/tasks.db') ?
+		db: sqlite.connect('tasks.db') ?
 	}
 
 	init_table(app)

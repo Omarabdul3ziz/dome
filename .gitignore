@@ -5,14 +5,3 @@
 .env
 *.env
 repo_*
-
-# Binaries for programs and plugins
-
-*.exe
-*.exe~
-*.so
-*.dylib
-*.dll
-
-*.db
-server
