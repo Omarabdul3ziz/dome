@@ -26,4 +26,4 @@ It is supposed to be a handon project in my learning journey of web technologies
 
 
 ### My personal notes on Notion (WIP).
-- [Docker](https://robust-dryosaurus-f97.notion.site/Docker-KB-6ddd681fdb194e248a6cc87ff859ddc8)
+- Docker: [Notes](https://robust-dryosaurus-f97.notion.site/Notes-6ddd681fdb194e248a6cc87ff859ddc8), [Cheatsheet](https://robust-dryosaurus-f97.notion.site/Cheatsheet-711a6dabade54595a1cea9797c0fc6fb), [Resources](https://robust-dryosaurus-f97.notion.site/Resources-36d81cd2e5b14523a52a6b0868465b47)
