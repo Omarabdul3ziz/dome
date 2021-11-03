@@ -81,10 +81,10 @@ export default {
       axios.get(path).then((res) => {
         res.data["tasks"].forEach((todo) => {
           this.todos.push({
-            id: todo.ID,
-            text: todo.Text,
-            complete: todo.Completed,
-            author: todo.User,
+            id: todo.id,
+            text: todo.text,
+            complete: todo.completed,
+            author: todo.user,
             editing: false,
           });
         });
