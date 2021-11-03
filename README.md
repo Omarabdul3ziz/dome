@@ -26,4 +26,10 @@ It is supposed to be a handon project in my learning journey of web technologies
 
 
 ### My personal notes on Notion (WIP).
-- Docker: [Notes](https://robust-dryosaurus-f97.notion.site/Notes-6ddd681fdb194e248a6cc87ff859ddc8), [Cheatsheet](https://robust-dryosaurus-f97.notion.site/Cheatsheet-711a6dabade54595a1cea9797c0fc6fb), [Resources](https://robust-dryosaurus-f97.notion.site/Resources-36d81cd2e5b14523a52a6b0868465b47)
+- Docker: [Notes](https://robust-dryosaurus-f97.notion.site/Notes-6ddd681fdb194e248a6cc87ff859ddc8), [Cheatsheet](https://robust-dryosaurus-f97.notion.site/Cheatsheet-711a6dabade54595a1cea9797c0fc6fb), [Resources](https://robust-dryosaurus-f97.notion.site/Resources-36d81cd2e5b14523a52a6b0868465b47).
+- Kubernetes: [Notes](https://robust-dryosaurus-f97.notion.site/Kubernetes-Notes-d74cefab6a1f483cba979cd6ad818057), [Helm notes](https://robust-dryosaurus-f97.notion.site/Helm-Notes-3def7d90ede14ce5b6f6c9c15886cdab).
+
+
+<hr style="border:4px solid gray"> </hr>
+
+[__](https://github.com/Omarabdul3ziz/dome/projects)
