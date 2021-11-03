@@ -59,7 +59,7 @@ export default {
       newTodo: "",
       idForTodo: "",
       todos: [],
-      baseUrl: "http://172.27.0.3:8080/tasks",
+      baseUrl: "http://api:5000/tasks",
     };
   },
 

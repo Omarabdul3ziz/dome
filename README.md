@@ -1,34 +1,6 @@
 ### Usage
 
-1. Create network and volume
+According to comment in this [question](https://stackoverflow.com/questions/61541970/vue-axios-api-call-doesnt-work-when-using-docker-networking-hostname), there is no issue.
 
-```
-docker network create net
-docker volume create vol
-```
-
-2. Start API server
-
-```
-docker container run \
--d \
--v vol:/opt/vlang/app/ \
--p 90:5000 \
---net net \
---name api \
-omarabdul3ziz/vlang_api
-```
-
-3. Start UI client
-
-```
-docker container run \
--d \
--e VUE_APP_API_URL=http://172.0.0.3:90 \
--p 91:8080 \
---net net \
---name ui \
-omarabdul3ziz/vue_ui
-```
-
-4. Go to http://localhost:91/
+`curl http://api:5000/tasks` works, because it runs from container sh.
+`axios.get("http://api:5000/tasks")` does not, because it runs from browser.
