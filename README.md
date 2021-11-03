@@ -1,11 +1,34 @@
 ### Usage
 
+1. Create network and volume
+
 ```
-docker network create --driver bridge net
+docker network create net
 docker volume create vol
-
-docker container run -d -v vol:/opt/vlang/app/ -p 90:5000 --name vlang --network=net omarabdul3ziz/vlang_api
-docker container run -d -p 91:8080 --name vue --network=net omarabdul3ziz/vue_ui
 ```
 
-Go to http://localhost:91/
+2. Start API server
+
+```
+docker container run \
+-d \
+-v vol:/opt/vlang/app/ \
+-p 90:5000 \
+--net net \
+--name api \
+omarabdul3ziz/vlang_api
+```
+
+3. Start UI client
+
+```
+docker container run \
+-d \
+-e VUE_APP_API_URL=http://172.0.0.3:90 \
+-p 91:8080 \
+--net net \
+--name ui \
+omarabdul3ziz/vue_ui
+```
+
+4. Go to http://localhost:91/
