@@ -32,4 +32,4 @@ It is supposed to be a handon project in my learning journey of web technologies
 
 <hr style="border:2px solid gray">
 
-[__](https://github.com/Omarabdul3ziz/dome/projects)
+[Ongoing Project](https://github.com/Omarabdul3ziz/dome/projects)
